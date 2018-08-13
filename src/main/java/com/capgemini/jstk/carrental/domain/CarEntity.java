@@ -40,7 +40,6 @@ public class CarEntity implements Serializable {
     @Column(nullable = false)
     private int milage;
 
-    @Column (name = "current_location")
     @ManyToOne
     private LocationEntity currentLocation;
 
@@ -48,10 +47,12 @@ public class CarEntity implements Serializable {
     Set<RentalEntity> rentals;
 
     @ManyToMany
-    @JoinTable(name = "EMPLOYEE",
+    @JoinTable(name = "CAR_CARER",
             joinColumns = {@JoinColumn(name = "CAR_ID")},
             inverseJoinColumns = {@JoinColumn(name = "EMPLOYEE_ID")}
     )
     private Collection<EmployeeEntity> carers;
+
+
 
 }

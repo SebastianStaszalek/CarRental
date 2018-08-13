@@ -15,19 +15,15 @@ public class RentalEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
     @ManyToOne
     private CustomerEntity customer;
 
-    @Column(nullable = false)
     @ManyToOne
     private CarEntity car;
 
-    @Column (name = "start_location", nullable = false)
     @ManyToOne
     private LocationEntity startLocation;
 
-    @Column (name = "end_location")
     @ManyToOne
     private LocationEntity endLocation;
 
