@@ -23,7 +23,7 @@ public class CarEntity implements Serializable {
     private String model;
 
     @ManyToOne
-    private TypeEntity type;
+    private TypeEntity carType;
 
     @Column(name = "production_year", nullable = false)
     private int productionYear;

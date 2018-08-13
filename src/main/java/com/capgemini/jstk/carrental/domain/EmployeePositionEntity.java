@@ -17,6 +17,13 @@ public class EmployeePositionEntity {
     @Column(nullable = false, length = 20)
     private String name;
 
-    @OneToMany (mappedBy = "position")
+    @OneToMany(mappedBy = "position")
     Set<EmployeeEntity> employees;
+
+    public void addEmployee(EmployeeEntity e) {
+        e.setPosition(this);
+        employees.add(e);
+    }
+
+
 }
