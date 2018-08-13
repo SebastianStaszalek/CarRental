@@ -3,13 +3,12 @@ package com.capgemini.jstk.carrental.domain;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "TYPE")
-public class TypeEntity implements Serializable{
+@Table(name = "EMPLOYEE_POSITION")
+public class EmployeePositionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,6 +17,6 @@ public class TypeEntity implements Serializable{
     @Column(nullable = false, length = 20)
     private String name;
 
-    @OneToMany(mappedBy = "type")
-    private Set<CarEntity> cars;
+    @OneToMany (mappedBy = "position")
+    Set<EmployeeEntity> employees;
 }
