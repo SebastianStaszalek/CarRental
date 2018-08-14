@@ -30,6 +30,16 @@ public class CarServiceImp implements CarService {
     }
 
     @Override
+    public CarTO findCarById(Long id) {
+        return carMapper.map(carDao.findOne(id));
+    }
+
+    @Override
+    public List<CarTO> getAllCars() {
+        return carMapper.map2TO(carDao.findAll());
+    }
+
+    @Override
     public CarTO addCar(CarTO car) {
         CarEntity carEntity = carMapper.map(car);
         return carMapper.map(carDao.save(carEntity));
@@ -53,10 +63,6 @@ public class CarServiceImp implements CarService {
         EmployeeEntity employeeEntity = employeeDao.findOne(employee.getId());
 
         employeeEntity.addCar(carEntity);
-        carEntity.addCarer(employeeEntity);
-
-        carDao.update(carEntity);
-        employeeDao.update(employeeEntity);
     }
 
     @Override

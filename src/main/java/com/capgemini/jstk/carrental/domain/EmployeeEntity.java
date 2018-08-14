@@ -32,9 +32,9 @@ public class EmployeeEntity implements Serializable {
     @ManyToMany (mappedBy = "carers")
     private Set<CarEntity> cars;
 
-
     public void addCar(CarEntity car) {
         cars.add(car);
+        car.addCarer(this);
     }
 
     public void removeCar(CarEntity car) {

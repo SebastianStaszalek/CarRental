@@ -7,6 +7,10 @@ import java.util.List;
 
 public interface CarService {
 
+    CarTO findCarById(Long id);
+
+    List<CarTO> getAllCars();
+
     CarTO addCar(CarTO car);
 
     void deleteCar(CarTO car);

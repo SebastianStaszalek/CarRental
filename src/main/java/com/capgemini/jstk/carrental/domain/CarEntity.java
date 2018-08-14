@@ -1,8 +1,9 @@
 package com.capgemini.jstk.carrental.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NonNull;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,6 +11,8 @@ import java.util.Set;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "CAR")
 public class CarEntity implements Serializable {
@@ -25,6 +28,7 @@ public class CarEntity implements Serializable {
     private String model;
 
     //@ManyToOne
+    @Column(name = "car_type", nullable = false, length = 20)
     private String carType;
 
     @Column(name = "production_year", nullable = false)
