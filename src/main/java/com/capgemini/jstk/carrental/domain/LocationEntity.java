@@ -1,12 +1,18 @@
 package com.capgemini.jstk.carrental.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "LOCATION")
 public class LocationEntity implements Serializable {
@@ -19,7 +25,7 @@ public class LocationEntity implements Serializable {
     private int phoneNumber;
 
     @Embedded
-    private AddressEntity address;
+    private Address address;
 
     @OneToMany(mappedBy = "location")
     Set<EmployeeEntity> employees;

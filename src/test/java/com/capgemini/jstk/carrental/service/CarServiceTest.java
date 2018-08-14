@@ -1,6 +1,5 @@
 package com.capgemini.jstk.carrental.service;
 
-import com.capgemini.jstk.carrental.domain.CarEntity;
 import com.capgemini.jstk.carrental.dto.CarTO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,8 +39,8 @@ public class CarServiceTest {
         CarTO carToCheck = carService.findCarById(savedCar.getId());
 
         //then
-        assertThat("Toyota").isEqualTo(carToCheck.getBrand());
-        assertThat(2017).isEqualTo(carToCheck.getProductionYear());
+        assertThat(carToCheck.getBrand()).isEqualTo("Toyota");
+        assertThat(carToCheck.getProductionYear()).isEqualTo(2017);
     }
 
     @Test
@@ -155,5 +154,43 @@ public class CarServiceTest {
         assertThat(carsList.size()).isEqualTo(2);
         assertThat(carsList.get(0).getBrand()).isEqualTo("Toyota");
         assertThat(carsList.get(1).getBrand()).isEqualTo("Toyota");
+    }
+
+    @Test
+    public void shouldUpdateCar() {
+        //given
+        CarTO car1= CarTO.builder()
+                .brand("BMW")
+                .model("X1")
+                .carType("suv")
+                .productionYear(2017)
+                .color("red")
+                .engineCapacity(2000)
+                .power(170)
+                .mileage(10000)
+                .build();
+
+        CarTO savedCar = carService.addCar(car1);
+
+        CarTO carToUpdate = CarTO.builder()
+                .id(1L)
+                .brand("BMW")
+                .model("X1")
+                .carType("suv")
+                .productionYear(2017)
+                .color("grey")
+                .engineCapacity(2000)
+                .power(170)
+                .mileage(12000)
+                .build();
+
+        //when
+        carService.updateCar(carToUpdate);
+        CarTO updatedCar = carService.findCarById(savedCar.getId());
+
+        //then
+        assertThat(updatedCar.getBrand()).isEqualTo("BMW");
+        assertThat(updatedCar.getMileage()).isEqualTo(12000);
+        assertThat(updatedCar.getColor()).isEqualTo("grey");
     }
 }

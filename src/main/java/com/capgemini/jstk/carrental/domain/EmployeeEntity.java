@@ -1,7 +1,9 @@
 package com.capgemini.jstk.carrental.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,6 +12,8 @@ import java.util.Set;
 @Entity
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "EMPLOYEE")
 public class EmployeeEntity implements Serializable {
 

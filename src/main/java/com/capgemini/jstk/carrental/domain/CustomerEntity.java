@@ -1,7 +1,10 @@
 package com.capgemini.jstk.carrental.domain;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -9,6 +12,9 @@ import java.time.Instant;
 import java.util.Set;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "CUSTOMER")
 public class CustomerEntity implements Serializable {
@@ -39,7 +45,7 @@ public class CustomerEntity implements Serializable {
     private Instant dateOfBirth;
 
     @Embedded
-    private AddressEntity address;
+    private Address address;
 
     @OneToMany (mappedBy = "customer")
     Set<RentalEntity> rentals;
