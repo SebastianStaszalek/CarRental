@@ -2,10 +2,12 @@ package com.capgemini.jstk.carrental.dao.impl;
 
 import com.capgemini.jstk.carrental.dao.CarDao;
 import com.capgemini.jstk.carrental.domain.CarEntity;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
 import java.util.List;
 
+@Repository
 public class CarDaoImp extends AbstractDao<CarEntity, Long> implements CarDao {
 
     @Override
@@ -21,4 +23,19 @@ public class CarDaoImp extends AbstractDao<CarEntity, Long> implements CarDao {
 
         return query.getResultList();
     }
+
+    @Override
+    public List<CarEntity> findCarByCarer(Long id) {
+
+        TypedQuery<CarEntity> query = entityManager.createQuery(
+          "select c from CarEntity c inner join c.carers cc" +
+                  "where cc.id = :id", CarEntity.class
+        );
+
+        query.setParameter("employeeId", id);
+
+        return query.getResultList();
+    }
+
+
 }

@@ -1,13 +1,15 @@
 package com.capgemini.jstk.carrental.domain;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Set;
 
 @Data
+@Builder
 @Entity
 @Table(name = "CAR")
 public class CarEntity implements Serializable {
@@ -22,8 +24,8 @@ public class CarEntity implements Serializable {
     @Column(nullable = false, length = 20)
     private String model;
 
-    @ManyToOne
-    private TypeEntity carType;
+    //@ManyToOne
+    private String carType;
 
     @Column(name = "production_year", nullable = false)
     private int productionYear;
@@ -38,7 +40,7 @@ public class CarEntity implements Serializable {
     private int power;
 
     @Column(nullable = false)
-    private int milage;
+    private int mileage;
 
     @ManyToOne
     private LocationEntity currentLocation;
@@ -51,8 +53,19 @@ public class CarEntity implements Serializable {
             joinColumns = {@JoinColumn(name = "CAR_ID")},
             inverseJoinColumns = {@JoinColumn(name = "EMPLOYEE_ID")}
     )
-    private Collection<EmployeeEntity> carers;
+    private Set<EmployeeEntity> carers;
 
 
+    public void addRental(RentalEntity rental) {
+        rental.setCar(this);
+        rentals.add(rental);
+    }
 
+    public void removeRental(RentalEntity rental) {
+        rentals.remove(rental);
+    }
+
+    public void addCarer(EmployeeEntity employee) {
+        carers.add(employee);
+    }
 }

@@ -1,13 +1,15 @@
 package com.capgemini.jstk.carrental.domain;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Data
+@Builder
 @Table(name = "EMPLOYEE")
 public class EmployeeEntity implements Serializable {
 
@@ -28,7 +30,15 @@ public class EmployeeEntity implements Serializable {
     private EmployeePositionEntity position;
 
     @ManyToMany (mappedBy = "carers")
-    private Collection<CarEntity> cars;
+    private Set<CarEntity> cars;
 
+
+    public void addCar(CarEntity car) {
+        cars.add(car);
+    }
+
+    public void removeCar(CarEntity car) {
+        cars.remove(car);
+    }
 
    }

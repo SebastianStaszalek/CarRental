@@ -18,6 +18,6 @@ public class TypeEntity implements Serializable{
     @Column(nullable = false, length = 20)
     private String name;
 
-    @OneToMany(mappedBy = "carType")
-    private Set<CarEntity> cars;
+   /* @OneToMany(mappedBy = "carType")
+    private Set<CarEntity> cars;*/
 }

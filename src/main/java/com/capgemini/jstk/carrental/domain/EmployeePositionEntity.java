@@ -20,9 +20,14 @@ public class EmployeePositionEntity {
     @OneToMany(mappedBy = "position")
     Set<EmployeeEntity> employees;
 
-    public void addEmployee(EmployeeEntity e) {
-        e.setPosition(this);
-        employees.add(e);
+    public void addEmployee(EmployeeEntity employee) {
+        employee.setPosition(this);
+        employees.add(employee);
+    }
+
+    public void deleteEmployee(EmployeeEntity employee) {
+        employee.getPosition().
+        employees.remove(employee);
     }
 
 

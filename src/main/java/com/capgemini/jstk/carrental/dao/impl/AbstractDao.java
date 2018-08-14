@@ -26,11 +26,6 @@ public abstract class AbstractDao <T, K extends Serializable> implements Dao<T, 
     }
 
     @Override
-    public T getOne(K id) {
-        return entityManager.getReference(getDomainClass(), id);
-    }
-
-    @Override
     public T findOne(K id) {
         return entityManager.find(getDomainClass(), id);
     }
@@ -56,7 +51,7 @@ public abstract class AbstractDao <T, K extends Serializable> implements Dao<T, 
 
     @Override
     public void delete(K id) {
-        entityManager.remove(getOne(id));
+        entityManager.remove(findOne(id));
     }
 
     @Override
