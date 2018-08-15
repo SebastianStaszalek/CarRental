@@ -23,16 +23,7 @@ public class CarServiceTest {
     @Test
     public void shouldFindCarById() {
         //given
-        CarTO car = CarTO.builder()
-                .brand("Toyota")
-                .model("Yarris")
-                .carType("mini")
-                .productionYear(2017)
-                .color("white")
-                .engineCapacity(1400)
-                .power(90)
-                .mileage(200)
-                .build();
+        CarTO car = createFirstCar();
 
         CarTO savedCar = carService.addCar(car);
         //when
@@ -46,43 +37,13 @@ public class CarServiceTest {
     @Test
     public void shouldDeleteCar() {
         //given
-        CarTO car1 = CarTO.builder()
-                .brand("Toyota")
-                .model("Yarris")
-                .carType("mini")
-                .productionYear(2017)
-                .color("white")
-                .engineCapacity(1400)
-                .power(90)
-                .mileage(200)
-                .build();
-
-        CarTO car2 = CarTO.builder()
-                .brand("Toyota")
-                .model("Yarris")
-                .carType("mini")
-                .productionYear(2017)
-                .color("black")
-                .engineCapacity(1400)
-                .power(90)
-                .mileage(150)
-                .build();
-
-        CarTO car3 = CarTO.builder()
-                .brand("BMW")
-                .model("X1")
-                .carType("suv")
-                .productionYear(2017)
-                .color("red")
-                .engineCapacity(2000)
-                .power(170)
-                .mileage(10000)
-                .build();
+        CarTO car1 = createFirstCar();
+        CarTO car2 = createSecondCar();
+        CarTO car3 = createThirdCar();
 
         carService.addCar(car1);
         CarTO carToCheck = carService.addCar(car2);
         carService.addCar(car3);
-
 
         //when
         carService.deleteCar(carToCheck);
@@ -96,49 +57,10 @@ public class CarServiceTest {
     @Test
     public void shouldFindCarByTypeAndBrand() {
         //given
-        CarTO car1 = CarTO.builder()
-                .brand("Toyota")
-                .model("Yarris")
-                .carType("mini")
-                .productionYear(2017)
-                .color("white")
-                .engineCapacity(1400)
-                .power(90)
-                .mileage(200)
-                .build();
-
-        CarTO car2 = CarTO.builder()
-                .brand("Toyota")
-                .model("Yarris")
-                .carType("mini")
-                .productionYear(2017)
-                .color("black")
-                .engineCapacity(1400)
-                .power(90)
-                .mileage(150)
-                .build();
-
-        CarTO car3 = CarTO.builder()
-                .brand("BMW")
-                .model("X1")
-                .carType("suv")
-                .productionYear(2017)
-                .color("red")
-                .engineCapacity(2000)
-                .power(170)
-                .mileage(10000)
-                .build();
-
-        CarTO car4 = CarTO.builder()
-                .brand("Toyota")
-                .model("Avensis")
-                .carType("sedan")
-                .productionYear(2017)
-                .color("blue")
-                .engineCapacity(1900)
-                .power(130)
-                .mileage(1000)
-                .build();
+        CarTO car1 = createFirstCar();
+        CarTO car2 = createSecondCar();
+        CarTO car3 = createThirdCar();
+        CarTO car4 = createFourthCar();
 
         carService.addCar(car1);
         carService.addCar(car2);
@@ -159,16 +81,7 @@ public class CarServiceTest {
     @Test
     public void shouldUpdateCar() {
         //given
-        CarTO car1= CarTO.builder()
-                .brand("BMW")
-                .model("X1")
-                .carType("suv")
-                .productionYear(2017)
-                .color("red")
-                .engineCapacity(2000)
-                .power(170)
-                .mileage(10000)
-                .build();
+        CarTO car1= createFirstCar();
 
         CarTO savedCar = carService.addCar(car1);
 
@@ -192,5 +105,59 @@ public class CarServiceTest {
         assertThat(updatedCar.getBrand()).isEqualTo("BMW");
         assertThat(updatedCar.getMileage()).isEqualTo(12000);
         assertThat(updatedCar.getColor()).isEqualTo("grey");
+    }
+
+
+
+    private CarTO createFirstCar() {
+        return CarTO.builder()
+                .brand("Toyota")
+                .model("Yarris")
+                .carType("mini")
+                .productionYear(2017)
+                .color("white")
+                .engineCapacity(1400)
+                .power(90)
+                .mileage(200)
+                .build();
+    }
+
+    public CarTO createSecondCar() {
+        return CarTO.builder()
+                .brand("Toyota")
+                .model("Yarris")
+                .carType("mini")
+                .productionYear(2017)
+                .color("black")
+                .engineCapacity(1400)
+                .power(90)
+                .mileage(150)
+                .build();
+    }
+
+    private CarTO createThirdCar() {
+        return CarTO.builder()
+                .brand("BMW")
+                .model("X1")
+                .carType("suv")
+                .productionYear(2017)
+                .color("red")
+                .engineCapacity(2000)
+                .power(170)
+                .mileage(10000)
+                .build();
+    }
+
+    private CarTO createFourthCar() {
+        return CarTO.builder()
+                .brand("Toyota")
+                .model("Avensis")
+                .carType("sedan")
+                .productionYear(2017)
+                .color("blue")
+                .engineCapacity(1900)
+                .power(130)
+                .mileage(1000)
+                .build();
     }
 }
