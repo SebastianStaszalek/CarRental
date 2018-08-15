@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -52,13 +53,22 @@ public class CarEntity implements Serializable {
     @OneToMany(mappedBy = "car")
     Set<RentalEntity> rentals;
 
-    @ManyToMany
-    @JoinTable(name = "CAR_CARER",
-            joinColumns = {@JoinColumn(name = "CAR_ID")},
-            inverseJoinColumns = {@JoinColumn(name = "EMPLOYEE_ID")}
-    )
-    private Set<EmployeeEntity> carers;
+    @ManyToMany (mappedBy = "cars")
+    private Set<EmployeeEntity> carers = new HashSet<>();
 
+
+    private Set<EmployeeEntity> getAllOwners() {
+        return carers;
+    }
+
+    public void addOwner(EmployeeEntity newOwner) {
+        getAllOwners().add(newOwner);
+        newOwner.updateCarReference(this);
+    }
+
+    protected void updateOwnerReference(EmployeeEntity employeeEntity) {
+        carers.add(employeeEntity);
+    }
 
     public void addRental(RentalEntity rental) {
         rental.setCar(this);
@@ -69,7 +79,4 @@ public class CarEntity implements Serializable {
         rentals.remove(rental);
     }
 
-    public void addCarer(EmployeeEntity employee) {
-        carers.add(employee);
-    }
 }

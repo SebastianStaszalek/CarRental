@@ -4,6 +4,26 @@ import com.capgemini.jstk.carrental.dao.EmployeeDao;
 import com.capgemini.jstk.carrental.domain.EmployeeEntity;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.TypedQuery;
+import java.util.List;
+
 @Repository
 public class EmployeeDaoImp extends AbstractDao<EmployeeEntity, Long> implements EmployeeDao {
+
+    @Override
+    public List<EmployeeEntity> findAllEmployeesInLocation(Long locationId) {
+        TypedQuery<EmployeeEntity> query = entityManager.createQuery(
+                "select emp from EmployeeEntity emp inner join emp.location l" +
+                        "where l.id = :id", EmployeeEntity.class
+        );
+
+        query.setParameter("locationId", locationId);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public List<EmployeeEntity> findAllCarCarersByCarAndLocation(Long locationId, Long carId) {
+        return null;
+    }
 }

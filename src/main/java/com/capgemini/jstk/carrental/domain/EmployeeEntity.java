@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -33,16 +34,32 @@ public class EmployeeEntity implements Serializable {
     @ManyToOne
     private EmployeePositionEntity position;
 
-    @ManyToMany (mappedBy = "carers")
-    private Set<CarEntity> cars;
 
-    public void addCar(CarEntity car) {
-        cars.add(car);
-        car.addCarer(this);
+    @ManyToMany
+    @JoinTable(name = "CAR_CARER",
+            joinColumns = {@JoinColumn(name = "EMPLOYEE_ID")},
+            inverseJoinColumns = {@JoinColumn(name = "CAR_ID")}
+    )
+    private Set<CarEntity> cars = new HashSet<>();
+
+
+    private Set<CarEntity> getAllCars() {
+        return cars;
+    }
+
+    public void addCar(CarEntity newCar) {
+        getAllCars().add(newCar);
+        newCar.updateOwnerReference(this);
+    }
+
+    protected void updateCarReference(CarEntity carEntity) {
+        cars.add(carEntity);
     }
 
     public void removeCar(CarEntity car) {
         cars.remove(car);
     }
+
+
 
    }

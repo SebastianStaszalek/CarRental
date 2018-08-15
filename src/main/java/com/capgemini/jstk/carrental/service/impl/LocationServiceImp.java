@@ -1,8 +1,11 @@
 package com.capgemini.jstk.carrental.service.impl;
 
 import com.capgemini.jstk.carrental.dao.LocationDao;
+import com.capgemini.jstk.carrental.domain.EmployeeEntity;
 import com.capgemini.jstk.carrental.domain.LocationEntity;
+import com.capgemini.jstk.carrental.dto.EmployeeTO;
 import com.capgemini.jstk.carrental.dto.LocationTO;
+import com.capgemini.jstk.carrental.mapper.EmployeeMapper;
 import com.capgemini.jstk.carrental.mapper.LocationMapper;
 import com.capgemini.jstk.carrental.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +21,13 @@ public class LocationServiceImp implements LocationService {
     private LocationMapper locationMapper;
     private LocationDao locationDao;
 
+    private EmployeeMapper employeeMapper;
+
     @Autowired
-    public LocationServiceImp(LocationMapper locationMapper, LocationDao locationDao) {
+    public LocationServiceImp(LocationMapper locationMapper, LocationDao locationDao, EmployeeMapper employeeMapper) {
         this.locationMapper = locationMapper;
         this.locationDao = locationDao;
+        this.employeeMapper = employeeMapper;
     }
 
     @Override
@@ -49,5 +55,21 @@ public class LocationServiceImp implements LocationService {
     public LocationTO updateLocation(LocationTO location) {
         LocationEntity locationEntity = locationMapper.map(location);
         return locationMapper.map(locationDao.update(locationEntity));
+    }
+
+    @Override
+    public void addEmployeeToLocation(Long locationId, EmployeeTO employee) {
+        EmployeeEntity employeeEntity = employeeMapper.map(employee);
+
+        LocationEntity location = locationDao.findOne(locationId);
+        location.addEmployee(employeeEntity);
+    }
+
+    @Override
+    public void removeEmployeeFromLocation(Long locationId, EmployeeTO employee) {
+        EmployeeEntity employeeEntity = employeeMapper.map(employee);
+
+        LocationEntity location = locationDao.findOne(locationId);
+        location.removeEmployee(employeeEntity);
     }
 }
