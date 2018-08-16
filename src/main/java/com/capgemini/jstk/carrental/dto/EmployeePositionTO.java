@@ -9,10 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmployeeTO {
+public class EmployeePositionTO {
 
     private Long id;
     private String name;
-    private String surname;
-    private EmployeePositionTO employeePosition;
 }

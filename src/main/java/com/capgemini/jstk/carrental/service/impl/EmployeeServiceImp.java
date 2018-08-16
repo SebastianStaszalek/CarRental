@@ -1,7 +1,10 @@
 package com.capgemini.jstk.carrental.service.impl;
 
 import com.capgemini.jstk.carrental.dao.EmployeeDao;
+import com.capgemini.jstk.carrental.dao.EmployeePositionDao;
 import com.capgemini.jstk.carrental.domain.EmployeeEntity;
+import com.capgemini.jstk.carrental.domain.EmployeePositionEntity;
+import com.capgemini.jstk.carrental.dto.EmployeePositionTO;
 import com.capgemini.jstk.carrental.dto.EmployeeTO;
 import com.capgemini.jstk.carrental.mapper.EmployeeMapper;
 import com.capgemini.jstk.carrental.service.EmployeeService;
@@ -11,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+//TODO: przy dodawaniu sprawdz czy podany pracownik lub samochod juz nie istnieje!
+//TODO: metoda update nie powinna korzystac z buildera i tworzyc nowy obiekt
 @Service
 @Transactional
 public class EmployeeServiceImp implements EmployeeService {
@@ -18,10 +23,14 @@ public class EmployeeServiceImp implements EmployeeService {
     private EmployeeMapper employeeMapper;
     private EmployeeDao employeeDao;
 
+    private EmployeePositionDao employeePositionDao;
+
     @Autowired
-    public EmployeeServiceImp(EmployeeMapper employeeMapper, EmployeeDao employeeDao) {
+    public EmployeeServiceImp(EmployeeMapper employeeMapper, EmployeeDao employeeDao,
+                              EmployeePositionDao employeePositionDao) {
         this.employeeMapper = employeeMapper;
         this.employeeDao = employeeDao;
+        this.employeePositionDao = employeePositionDao;
     }
 
     @Override
@@ -36,7 +45,12 @@ public class EmployeeServiceImp implements EmployeeService {
 
     @Override
     public EmployeeTO addEmployee(EmployeeTO employee) {
+        EmployeePositionTO employeePositionTO = employee.getEmployeePosition();
+
+        EmployeePositionEntity employeePositionEntity = employeePositionDao.findOne(employeePositionTO.getId());
         EmployeeEntity employeeEntity = employeeMapper.map(employee);
+
+        employeeEntity.setPosition(employeePositionEntity);
         return employeeMapper.map(employeeDao.save(employeeEntity));
     }
 
