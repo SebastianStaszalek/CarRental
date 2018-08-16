@@ -1,6 +1,8 @@
 package com.capgemini.jstk.carrental.service;
 
 import com.capgemini.jstk.carrental.dto.CarTO;
+import com.capgemini.jstk.carrental.dto.EmployeePositionTO;
+import com.capgemini.jstk.carrental.dto.EmployeeTO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,12 @@ public class CarServiceTest {
 
     @Autowired
     CarService carService;
+
+    @Autowired
+    EmployeeService employeeService;
+
+    @Autowired
+    EmployeePositionService employeePositionService;
 
     @Test
     public void shouldFindCarById() {
@@ -107,7 +115,48 @@ public class CarServiceTest {
         assertThat(updatedCar.getColor()).isEqualTo("grey");
     }
 
+    @Test
+    public void shouldFindCarByCarer() {
+        //given
+        EmployeePositionTO position = createFirstPosition();
+        CarTO car1 = createFirstCar();
+        CarTO car2 = createThirdCar();
+        EmployeeTO employee = createFirstEmployee();
 
+        employeePositionService.addEmployeePosition(position);
+        CarTO savedCar = carService.addCar(car1);
+        CarTO savedCar2 = carService.addCar(car2);
+        EmployeeTO savedEmployee = employeeService.addEmployee(employee);
+
+        //when
+        carService.assignCarToCarer(savedCar, savedEmployee);
+        carService.assignCarToCarer(savedCar2, savedEmployee);
+
+        List<CarTO> carList = carService.findCarByCarer(savedEmployee);
+        CarTO carToCheck = carList.get(0);
+        CarTO carToCheck2 = carList.get(1);
+
+        //then
+        assertThat(carToCheck.getBrand()).isEqualTo("Toyota");
+        assertThat(carToCheck2.getBrand()).isEqualTo("BMW");
+        assertThat(carList.size()).isEqualTo(2);
+    }
+
+    private EmployeePositionTO createFirstPosition() {
+        return EmployeePositionTO.builder()
+                .name("Kierownik")
+                .build();
+    }
+
+    private EmployeeTO createFirstEmployee() {
+        return EmployeeTO.builder()
+                .name("Tomasz")
+                .surname("Kot")
+                .employeePosition(EmployeePositionTO.builder()
+                    .id(1L)
+                    .name("Kierownik").build())
+                .build();
+    }
 
     private CarTO createFirstCar() {
         return CarTO.builder()

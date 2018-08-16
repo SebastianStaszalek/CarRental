@@ -28,11 +28,11 @@ public class CarDaoImp extends AbstractDao<CarEntity, Long> implements CarDao {
     public List<CarEntity> findCarByCarer(Long id) {
 
         TypedQuery<CarEntity> query = entityManager.createQuery(
-          "select car from CarEntity car inner join car.carers cc" +
+          "select car from CarEntity car inner join car.carers cc " +
                   "where cc.id = :id", CarEntity.class
         );
 
-        query.setParameter("employeeId", id);
+        query.setParameter("id", id);
 
         return query.getResultList();
     }

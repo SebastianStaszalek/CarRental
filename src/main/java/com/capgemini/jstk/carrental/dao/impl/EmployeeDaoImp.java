@@ -13,11 +13,11 @@ public class EmployeeDaoImp extends AbstractDao<EmployeeEntity, Long> implements
     @Override
     public List<EmployeeEntity> findAllEmployeesInLocation(Long locationId) {
         TypedQuery<EmployeeEntity> query = entityManager.createQuery(
-                "select emp from EmployeeEntity emp inner join emp.location l" +
+                "select emp from EmployeeEntity emp inner join emp.location l " +
                         "where l.id = :id", EmployeeEntity.class
         );
 
-        query.setParameter("locationId", locationId);
+        query.setParameter("id", locationId);
 
         return query.getResultList();
     }
