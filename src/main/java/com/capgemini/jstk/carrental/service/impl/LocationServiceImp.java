@@ -23,14 +23,12 @@ public class LocationServiceImp implements LocationService {
     private LocationDao locationDao;
 
     private EmployeeDao employeeDao;
-    private EmployeeMapper employeeMapper;
 
     @Autowired
     public LocationServiceImp(LocationMapper locationMapper, LocationDao locationDao,
-                              EmployeeMapper employeeMapper, EmployeeDao employeeDao) {
+                              EmployeeDao employeeDao) {
         this.locationMapper = locationMapper;
         this.locationDao = locationDao;
-        this.employeeMapper = employeeMapper;
         this.employeeDao = employeeDao;
     }
 
@@ -71,7 +69,7 @@ public class LocationServiceImp implements LocationService {
 
     @Override
     public void removeEmployeeFromLocation(Long locationId, EmployeeTO employee) {
-        EmployeeEntity employeeEntity = employeeMapper.map(employee);
+        EmployeeEntity employeeEntity = employeeDao.findOne(employee.getId());
 
         LocationEntity location = locationDao.findOne(locationId);
         location.removeEmployee(employeeEntity);

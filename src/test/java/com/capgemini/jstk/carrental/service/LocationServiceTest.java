@@ -1,6 +1,8 @@
 package com.capgemini.jstk.carrental.service;
 
 import com.capgemini.jstk.carrental.domain.Address;
+import com.capgemini.jstk.carrental.dto.EmployeePositionTO;
+import com.capgemini.jstk.carrental.dto.EmployeeTO;
 import com.capgemini.jstk.carrental.dto.LocationTO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,13 +15,21 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+//@SpringBootTest(properties = "spring.profiles.active=mysql")
+
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(properties = "spring.profiles.active=hsql")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class LocationServiceTest {
 
     @Autowired
     LocationService locationService;
+
+    @Autowired
+    EmployeeService employeeService;
+
+    @Autowired
+    EmployeePositionService employeePositionService;
 
     @Test
     public void shouldFindLocationById() {
@@ -85,6 +95,41 @@ public class LocationServiceTest {
         assertThat(updatedLocation.getAddress().getStreet()).isEqualTo("Wodna 5");
     }
 
+    @Test
+    public void shouldRemoveEmployeeFromLocation() {
+        //given
+        EmployeePositionTO position = createFirstPosition();
+        EmployeeTO employee1 = createFirstEmployee();
+        EmployeeTO employee2 = createSecondEmployee();
+        EmployeeTO employee3 = createThirdEmployee();
+
+        LocationTO location = createFirstLocation();
+
+        employeePositionService.addEmployeePosition(position);
+        EmployeeTO savedEmployee1 = employeeService.addEmployee(employee1);
+        EmployeeTO savedEmployee2 = employeeService.addEmployee(employee2);
+        EmployeeTO savedEmployee3 = employeeService.addEmployee(employee3);
+        LocationTO savedLocation = locationService.addLocation(location);
+
+        //when
+        locationService.addEmployeeToLocation(savedLocation.getId(), savedEmployee1);
+        locationService.addEmployeeToLocation(savedLocation.getId(), savedEmployee2);
+        locationService.addEmployeeToLocation(savedLocation.getId(), savedEmployee3);
+
+        locationService.removeEmployeeFromLocation(savedLocation.getId(), savedEmployee1);
+        locationService.removeEmployeeFromLocation(savedLocation.getId(), savedEmployee3);
+
+        List<EmployeeTO> employeesList = employeeService.findAllEmployeesByLocation(savedLocation.getId());
+
+        EmployeeTO EmpFromLocation = employeesList.get(0);
+
+        EmployeeTO removedEmployee = employeeService.findEmployeeById(savedEmployee1.getId());
+        //then
+        assertThat(employeesList.size()).isEqualTo(1);
+        assertThat(removedEmployee.getId()).isNotNull();
+        assertThat(EmpFromLocation.getSurname()).isEqualTo("Majek");
+    }
+
 
 
     private LocationTO createFirstLocation() {
@@ -114,6 +159,42 @@ public class LocationServiceTest {
                         .city("Wroclaw")
                         .street("Polna 10")
                         .postalCode("64-120").build())
+                .build();
+    }
+
+    private EmployeePositionTO createFirstPosition() {
+        return EmployeePositionTO.builder()
+                .name("Sprzedawca")
+                .build();
+    }
+
+    private EmployeeTO createFirstEmployee() {
+        return EmployeeTO.builder()
+                .name("Tomasz")
+                .surname("Kot")
+                .employeePosition(EmployeePositionTO.builder()
+                        .id(1L)
+                        .name("Sprzedawca").build())
+                .build();
+    }
+
+    private EmployeeTO createSecondEmployee() {
+        return EmployeeTO.builder()
+                .name("Lukasz")
+                .surname("Majek")
+                .employeePosition(EmployeePositionTO.builder()
+                        .id(1L)
+                        .name("Sprzedawca").build())
+                .build();
+    }
+
+    private EmployeeTO createThirdEmployee() {
+        return EmployeeTO.builder()
+                .name("Maja")
+                .surname("Heller")
+                .employeePosition(EmployeePositionTO.builder()
+                        .id(1L)
+                        .name("Sprzedawca").build())
                 .build();
     }
 }

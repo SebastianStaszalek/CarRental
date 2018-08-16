@@ -24,6 +24,14 @@ public class EmployeeDaoImp extends AbstractDao<EmployeeEntity, Long> implements
 
     @Override
     public List<EmployeeEntity> findAllCarCarersByCarAndLocation(Long locationId, Long carId) {
-        return null;
+        TypedQuery<EmployeeEntity> query = entityManager.createQuery(
+                "select emp from EmployeeEntity emp join emp.cars c " +
+                        "where c.id = :carId and emp.location.id = :locationId" , EmployeeEntity.class
+        );
+
+        query.setParameter("locationId", locationId);
+        query.setParameter("carId", carId);
+
+        return query.getResultList();
     }
 }
