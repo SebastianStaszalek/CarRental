@@ -1,5 +1,6 @@
 package com.capgemini.jstk.carrental.service.impl;
 
+import com.capgemini.jstk.carrental.dao.EmployeeDao;
 import com.capgemini.jstk.carrental.dao.LocationDao;
 import com.capgemini.jstk.carrental.domain.EmployeeEntity;
 import com.capgemini.jstk.carrental.domain.LocationEntity;
@@ -21,13 +22,16 @@ public class LocationServiceImp implements LocationService {
     private LocationMapper locationMapper;
     private LocationDao locationDao;
 
+    private EmployeeDao employeeDao;
     private EmployeeMapper employeeMapper;
 
     @Autowired
-    public LocationServiceImp(LocationMapper locationMapper, LocationDao locationDao, EmployeeMapper employeeMapper) {
+    public LocationServiceImp(LocationMapper locationMapper, LocationDao locationDao,
+                              EmployeeMapper employeeMapper, EmployeeDao employeeDao) {
         this.locationMapper = locationMapper;
         this.locationDao = locationDao;
         this.employeeMapper = employeeMapper;
+        this.employeeDao = employeeDao;
     }
 
     @Override
@@ -59,7 +63,7 @@ public class LocationServiceImp implements LocationService {
 
     @Override
     public void addEmployeeToLocation(Long locationId, EmployeeTO employee) {
-        EmployeeEntity employeeEntity = employeeMapper.map(employee);
+        EmployeeEntity employeeEntity = employeeDao.findOne(employee.getId());
 
         LocationEntity location = locationDao.findOne(locationId);
         location.addEmployee(employeeEntity);

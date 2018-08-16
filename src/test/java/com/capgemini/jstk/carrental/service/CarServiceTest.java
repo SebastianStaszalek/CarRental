@@ -120,17 +120,21 @@ public class CarServiceTest {
         //given
         EmployeePositionTO position = createFirstPosition();
         CarTO car1 = createFirstCar();
-        CarTO car2 = createThirdCar();
+        CarTO car2 = createSecondCar();
+        CarTO car3 = createThirdCar();
+
         EmployeeTO employee = createFirstEmployee();
 
-        employeePositionService.addEmployeePosition(position);
         CarTO savedCar = carService.addCar(car1);
-        CarTO savedCar2 = carService.addCar(car2);
+        carService.addCar(car2);
+        CarTO savedCar3 = carService.addCar(car3);
+
+        employeePositionService.addEmployeePosition(position);
         EmployeeTO savedEmployee = employeeService.addEmployee(employee);
 
         //when
         carService.assignCarToCarer(savedCar, savedEmployee);
-        carService.assignCarToCarer(savedCar2, savedEmployee);
+        carService.assignCarToCarer(savedCar3, savedEmployee);
 
         List<CarTO> carList = carService.findCarByCarer(savedEmployee);
         CarTO carToCheck = carList.get(0);

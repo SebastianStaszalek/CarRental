@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -28,7 +29,7 @@ public class LocationEntity implements Serializable {
     private Address address;
 
     @OneToMany(mappedBy = "location")
-    Set<EmployeeEntity> employees;
+    Set<EmployeeEntity> employees = new HashSet<>();
 
     @OneToMany(mappedBy = "startLocation")
     Set<RentalEntity> startRentals;
@@ -39,13 +40,15 @@ public class LocationEntity implements Serializable {
     @OneToMany(mappedBy = "currentLocation")
     Set<CarEntity> cars;
 
+
     public void addEmployee(EmployeeEntity employee) {
+        this.employees.add(employee);
         employee.setLocation(this);
-        employees.add(employee);
     }
 
     public void removeEmployee(EmployeeEntity employee) {
         employees.remove(employee);
+        employee.setLocation(null);
     }
 
     public void addStartRental(RentalEntity rental) {
