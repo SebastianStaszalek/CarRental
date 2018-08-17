@@ -21,6 +21,9 @@ public class RentalEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Version
+    private Long version;
+
     @ManyToOne
     private CustomerEntity customer;
 

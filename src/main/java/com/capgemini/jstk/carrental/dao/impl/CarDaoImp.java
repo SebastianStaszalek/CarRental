@@ -11,6 +11,30 @@ import java.util.List;
 public class CarDaoImp extends AbstractDao<CarEntity, Long> implements CarDao {
 
     @Override
+    public CarEntity update(CarEntity entity) {
+        String brand = entity.getBrand();
+        String model = entity.getModel();
+        String carType = entity.getCarType();
+        int productionYear = entity.getProductionYear();
+        String color = entity.getColor();
+        int engineCapacity = entity.getEngineCapacity();
+        int power = entity.getPower();
+        int mileage = entity.getMileage();
+
+        CarEntity entityToUpdate = findOne(entity.getId());
+        entityToUpdate.setBrand(brand);
+        entityToUpdate.setModel(model);
+        entityToUpdate.setCarType(carType);
+        entityToUpdate.setProductionYear(productionYear);
+        entityToUpdate.setColor(color);
+        entityToUpdate.setEngineCapacity(engineCapacity);
+        entityToUpdate.setPower(power);
+        entityToUpdate.setMileage(mileage);
+
+        return entityToUpdate;
+    }
+
+    @Override
     public List<CarEntity> findCarByTypeAndBrand(String type, String brand) {
 
         TypedQuery<CarEntity> query = entityManager.createQuery(

@@ -20,6 +20,9 @@ public class EmployeePositionEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Version
+    private Long version;
+
     @Column(nullable = false, length = 20)
     private String name;
 

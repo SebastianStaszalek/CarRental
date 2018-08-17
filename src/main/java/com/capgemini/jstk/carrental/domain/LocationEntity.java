@@ -22,6 +22,9 @@ public class LocationEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Version
+    private Long version;
+
     @Column(name = "phone", nullable = false)
     private int phoneNumber;
 

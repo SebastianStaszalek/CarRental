@@ -15,7 +15,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(properties = "spring.profiles.active=hsql")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class CarServiceTest {
 
@@ -94,7 +94,7 @@ public class CarServiceTest {
         CarTO savedCar = carService.addCar(car1);
 
         CarTO carToUpdate = CarTO.builder()
-                .id(1L)
+                .id(savedCar.getId())
                 .brand("BMW")
                 .model("X1")
                 .carType("suv")

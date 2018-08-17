@@ -23,6 +23,9 @@ public class CustomerEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Version
+    private Long version;
+
     @Column(nullable = false, length = 30)
     private String name;
 

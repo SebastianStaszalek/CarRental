@@ -20,6 +20,9 @@ public class EmployeeEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Version
+    private Long version;
+
     @Column(nullable = false, length = 30)
     private String name;
 
@@ -31,7 +34,6 @@ public class EmployeeEntity implements Serializable {
 
     @ManyToOne
     private EmployeePositionEntity position;
-
 
     @ManyToMany
     @JoinTable(name = "CAR_CARER",

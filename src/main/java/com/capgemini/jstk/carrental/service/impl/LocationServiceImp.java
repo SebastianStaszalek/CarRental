@@ -6,7 +6,6 @@ import com.capgemini.jstk.carrental.domain.EmployeeEntity;
 import com.capgemini.jstk.carrental.domain.LocationEntity;
 import com.capgemini.jstk.carrental.dto.EmployeeTO;
 import com.capgemini.jstk.carrental.dto.LocationTO;
-import com.capgemini.jstk.carrental.mapper.EmployeeMapper;
 import com.capgemini.jstk.carrental.mapper.LocationMapper;
 import com.capgemini.jstk.carrental.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
