@@ -54,7 +54,7 @@ public class CarEntity extends Auditable<String> implements Serializable {
     @ManyToOne
     private LocationEntity currentLocation;
 
-    @OneToMany(mappedBy = "car")
+    @OneToMany(mappedBy = "car", cascade = CascadeType.REMOVE)
     Set<RentalEntity> rentals;
 
     @ManyToMany (mappedBy = "cars")

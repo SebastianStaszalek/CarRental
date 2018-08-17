@@ -13,6 +13,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Date;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -66,11 +67,54 @@ public class RentalServiceTest {
 
         //then
         assertThat(savedRental.getId()).isNotNull();
+        assertThat(savedRental.getTotalCost()).isEqualTo(700);
         assertThat(savedCustomer.getId()).isEqualTo(customerId);
         assertThat(savedCar.getId()).isEqualTo(carId);
         assertThat(savedStartLocation.getId()).isEqualTo(startRentalId);
         assertThat(savedEndLocation.getId()).isEqualTo(endRentalId);
 
+    }
+
+    @Test
+    public void shouldRemoveRentalCascadedWhenRemovingCar() {
+        //given
+        CustomerTO customer = createFirtsCustomer();
+        CarTO car = createFirstCar();
+        LocationTO startLocation = createFirstLocation();
+        LocationTO endLocation = createSecondLocation();
+
+        CustomerTO savedCustomer = customerService.addCustomer(customer);
+        CarTO savedCar = carService.addCar(car);
+        LocationTO savedStartLocation = locationService.addLocation(startLocation);
+        LocationTO savedEndLocation = locationService.addLocation(endLocation);
+
+        RentalTO newRental = RentalTO.builder()
+                .startDate(Date.valueOf("2018-08-10"))
+                .endDate(Date.valueOf("2018-08-15"))
+                .totalCost(700)
+                .customerId(savedCustomer.getId())
+                .carId(savedCar.getId())
+                .startLocationId(savedStartLocation.getId())
+                .endLocationId(savedEndLocation.getId())
+                .build();
+
+        RentalTO savedRental = rentalService.addRental(newRental);
+
+        //when
+        carService.deleteCar(savedCar);
+
+        RentalTO rentalToCheck = rentalService.findRentalById(savedRental.getId());
+        List<RentalTO> rentalsList = rentalService.getAllRentals();
+
+        CustomerTO customerToCheck = customerService.findCustomerById(savedCustomer.getId());
+        LocationTO locationToCheck = locationService.findLocationById(savedStartLocation.getId());
+        LocationTO locationToCheck2 = locationService.findLocationById(savedEndLocation.getId());
+        //then
+        assertThat(rentalsList).isEmpty();
+        assertThat(rentalToCheck).isNull();
+        assertThat(customerToCheck.getId()).isNotNull();
+        assertThat(locationToCheck.getId()).isNotNull();
+        assertThat(locationToCheck2.getId()).isNotNull();
     }
 
     private CustomerTO createFirtsCustomer() {
