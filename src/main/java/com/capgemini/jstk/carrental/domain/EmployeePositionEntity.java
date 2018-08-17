@@ -1,11 +1,13 @@
 package com.capgemini.jstk.carrental.domain;
 
+import com.capgemini.jstk.carrental.audit.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Data
@@ -14,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "EMPLOYEE_POSITION")
-public class EmployeePositionEntity {
+public class EmployeePositionEntity extends Auditable<String> implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

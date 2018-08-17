@@ -15,7 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 //TODO: przy dodawaniu sprawdz czy podany pracownik lub samochod juz nie istnieje!
-//TODO: metoda update nie powinna korzystac z buildera i tworzyc nowy obiekt
+//TODO: ogarnij EqualsAndHashCode!
+//TODO: usun nie uzywane metody!
 @Service
 @Transactional
 public class EmployeeServiceImp implements EmployeeService {

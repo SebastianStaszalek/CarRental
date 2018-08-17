@@ -1,6 +1,7 @@
 package com.capgemini.jstk.carrental.domain;
 
 
+import com.capgemini.jstk.carrental.audit.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.Instant;
+import java.util.Date;
 import java.util.Set;
 
 @Data
@@ -17,7 +18,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "CUSTOMER")
-public class CustomerEntity implements Serializable {
+public class CustomerEntity extends Auditable<String> implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -45,13 +46,22 @@ public class CustomerEntity implements Serializable {
     private String drivingLicense;
 
     @Column(name = "date_of_birth", nullable = false)
-    private Instant dateOfBirth;
+    private Date dateOfBirth;
 
     @Embedded
     private Address address;
 
     @OneToMany (mappedBy = "customer")
     Set<RentalEntity> rentals;
+
+    public void addRental(RentalEntity rental) {
+        rental.setCustomer(this);
+        rentals.add(rental);
+    }
+
+    public void removeStartRental(RentalEntity rental) {
+        rentals.remove(rental);
+    }
 
 }
 
