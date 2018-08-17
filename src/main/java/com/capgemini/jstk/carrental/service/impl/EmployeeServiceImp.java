@@ -71,4 +71,10 @@ public class EmployeeServiceImp implements EmployeeService {
         List<EmployeeEntity> employeeList = employeeDao.findAllCarCarersByCarAndLocation(locationId, carId);
         return employeeMapper.map2TO(employeeList);
     }
+
+    @Override
+    public List<EmployeeTO> findEmployeesByPosition(Long positionId) {
+        List<EmployeeEntity> employeeList = employeeDao.findEmployeesByPosition(positionId);
+        return employeeMapper.map2TO(employeeList);
+    }
 }

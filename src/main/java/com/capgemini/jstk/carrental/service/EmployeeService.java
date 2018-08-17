@@ -18,4 +18,6 @@ public interface EmployeeService {
 
     List<EmployeeTO> findAllCarCarersByCarAndLocation(Long locationId, Long carId);
 
+    List<EmployeeTO>  findEmployeesByPosition(Long positionId);
+
 }

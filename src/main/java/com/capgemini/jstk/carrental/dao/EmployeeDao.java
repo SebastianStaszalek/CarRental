@@ -9,4 +9,6 @@ public interface EmployeeDao extends Dao<EmployeeEntity, Long>{
     List<EmployeeEntity> findAllEmployeesInLocation(Long locationId);
 
     List<EmployeeEntity> findAllCarCarersByCarAndLocation(Long locationId, Long carId);
+
+    List<EmployeeEntity> findEmployeesByPosition(Long positionId);
 }

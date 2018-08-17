@@ -34,4 +34,16 @@ public class EmployeeDaoImp extends AbstractDao<EmployeeEntity, Long> implements
 
         return query.getResultList();
     }
+
+    @Override
+    public List<EmployeeEntity> findEmployeesByPosition(Long positionId) {
+        TypedQuery<EmployeeEntity> query = entityManager.createQuery(
+                "select emp from EmployeeEntity emp" +
+                        " where emp.position.id = :positionId", EmployeeEntity.class
+        );
+
+        query.setParameter("positionId", positionId);
+
+        return query.getResultList();
+    }
 }

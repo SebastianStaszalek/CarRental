@@ -102,9 +102,38 @@ public class EmployeeServiceTest {
         assertThat(secondCarCarer.getSurname()).isEqualTo("Heller");
     }
 
+    @Test
+    public void shouldFindEmployeesByPosition() {
+        EmployeePositionTO position1 = createFirstPosition();
+        EmployeePositionTO position2 = createSecondPosition();
+
+        EmployeeTO employee1 = createFirstEmployee();
+        EmployeeTO employee2 = createSecondEmployee();
+        EmployeeTO employee3 = createThirdEmployee();
+
+        EmployeePositionTO savedPosition = employeePositionService.addEmployeePosition(position1);
+        employeePositionService.addEmployeePosition(position2);
+
+        employeeService.addEmployee(employee1);
+        employeeService.addEmployee(employee2);
+        employeeService.addEmployee(employee3);
+
+        //when
+        List<EmployeeTO> employeesList = employeeService.findEmployeesByPosition(savedPosition.getId());
+
+        //then
+        assertThat(employeesList.size()).isEqualTo(2);
+    }
+
     private EmployeePositionTO createFirstPosition() {
         return EmployeePositionTO.builder()
                 .name("Sprzedawca")
+                .build();
+    }
+
+    private EmployeePositionTO createSecondPosition() {
+        return EmployeePositionTO.builder()
+                .name("Kierownik")
                 .build();
     }
 
@@ -133,7 +162,7 @@ public class EmployeeServiceTest {
                 .name("Maja")
                 .surname("Heller")
                 .employeePosition(EmployeePositionTO.builder()
-                        .id(1L)
+                        .id(2L)
                         .name("Sprzedawca").build())
                 .build();
     }
