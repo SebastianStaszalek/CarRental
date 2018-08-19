@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -77,5 +78,15 @@ public class CarServiceImp implements CarService {
     @Override
     public List<CarTO> findCarByCarer(EmployeeTO employee) {
         return carMapper.map2TO(carDao.findCarByCarer(employee.getId()));
+    }
+
+    @Override
+    public List<CarTO> findCarsRentedByDifferentCustomers() {
+        return carMapper.map2TO(carDao.findCarsRentedByDifferentCustomers());
+    }
+
+    @Override
+    public List<CarTO> findCarsRentedInGivenPeriodOfTime(Date from, Date to) {
+        return carMapper.map2TO(carDao.findCarsRentedInGivenPeriodOfTime(from, to));
     }
 }

@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class RentalDaoImp extends AbstractDao<RentalEntity, Long> implements RentalDao {
+
 }

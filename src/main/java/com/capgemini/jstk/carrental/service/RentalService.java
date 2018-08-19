@@ -12,4 +12,5 @@ public interface RentalService {
 
     RentalTO addRental(RentalTO rental);
 
+
 }
