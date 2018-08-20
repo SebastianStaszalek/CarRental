@@ -8,10 +8,12 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
+@Transactional(Transactional.TxType.REQUIRED)
 public abstract class AbstractDao <T, K extends Serializable> implements Dao<T, K> {
 
     @PersistenceContext
@@ -57,6 +59,16 @@ public abstract class AbstractDao <T, K extends Serializable> implements Dao<T, 
     @Override
     public void deleteAll() {
         entityManager.createQuery("delete " + getDomainClassName()).executeUpdate();
+    }
+
+    @Override
+    public void flush() {
+        entityManager.flush();
+    }
+
+    @Override
+    public void detach(T entity){
+        entityManager.detach(entity);
     }
 
     @Override

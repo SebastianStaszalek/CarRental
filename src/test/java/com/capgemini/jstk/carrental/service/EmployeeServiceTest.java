@@ -1,6 +1,5 @@
 package com.capgemini.jstk.carrental.service;
 
-import com.capgemini.jstk.carrental.domain.Address;
 import com.capgemini.jstk.carrental.dto.CarTO;
 import com.capgemini.jstk.carrental.dto.EmployeePositionTO;
 import com.capgemini.jstk.carrental.dto.EmployeeTO;

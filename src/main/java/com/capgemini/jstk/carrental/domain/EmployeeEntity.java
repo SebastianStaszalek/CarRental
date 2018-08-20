@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Data
-@EqualsAndHashCode(exclude = {"location", "position", "cars"})
+@EqualsAndHashCode(callSuper = true, exclude = {"location", "position", "cars"})
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

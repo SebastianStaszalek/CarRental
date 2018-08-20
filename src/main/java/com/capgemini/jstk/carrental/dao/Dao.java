@@ -19,6 +19,10 @@ public interface Dao <T, K extends Serializable> {
 
     void deleteAll();
 
+    void flush();
+
+    void detach(T entity);
+
     long count();
 
     boolean exists(K id);

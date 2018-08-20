@@ -1,5 +1,7 @@
 package com.capgemini.jstk.carrental.service;
 
+import com.capgemini.jstk.carrental.dao.CarDao;
+import com.capgemini.jstk.carrental.domain.CarEntity;
 import com.capgemini.jstk.carrental.dto.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.transaction.Transactional;
 import java.sql.Date;
 import java.util.List;
 
@@ -38,6 +41,9 @@ public class CarServiceTest {
 
     @Autowired
     TestTO testTO;
+
+    @Autowired
+    CarDao carDao;
 
     @Test
     public void shouldAddCar() {
@@ -454,5 +460,44 @@ public class CarServiceTest {
         assertThat(carTOCheck.getId()).isEqualTo(savedCar3.getId());
 
     }
+
+    //TODO: nie wykrywa wyjatku??
+    @Test//(expected = ObjectOptimisticLockingFailureException.class)
+    @Transactional
+    public void shouldThrowOptimisticLockingException() {
+
+        // given
+        CarEntity carEntity = CarEntity.builder()
+                .brand("Toyota")
+                .model("Yarris")
+                .carType("mini")
+                .productionYear(2017)
+                .color("white")
+                .engineCapacity(1400)
+                .power(90)
+                .mileage(200)
+                .build();
+
+        carEntity = carDao.save(carEntity);
+        carDao.flush();
+        carDao.detach(carEntity);
+        carEntity.setModel("Mazda");
+
+        CarEntity newClientEntity = carDao.findOne(carEntity.getId());
+
+        newClientEntity.setModel("Toyota");
+        carDao.save(newClientEntity);
+        carDao.flush();
+
+
+        // when
+        CarEntity carEntity2 = carDao.update(carEntity);
+        carDao.save(carEntity2);
+
+    }
+
+
+
+
 
 }

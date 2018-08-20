@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Data
 @Builder
-@EqualsAndHashCode(exclude = {"customer", "car", "startLocation", "endLocation"})
+@EqualsAndHashCode(callSuper = true, exclude = {"customer", "car", "startLocation", "endLocation"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity

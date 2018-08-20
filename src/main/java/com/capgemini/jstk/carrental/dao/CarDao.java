@@ -1,7 +1,6 @@
 package com.capgemini.jstk.carrental.dao;
 
 import com.capgemini.jstk.carrental.domain.CarEntity;
-import com.capgemini.jstk.carrental.domain.RentalEntity;
 
 import java.util.Date;
 import java.util.List;
