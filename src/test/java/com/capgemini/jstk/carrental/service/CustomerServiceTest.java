@@ -1,7 +1,7 @@
 package com.capgemini.jstk.carrental.service;
 
-import com.capgemini.jstk.carrental.domain.Address;
 import com.capgemini.jstk.carrental.dto.CustomerTO;
+import com.capgemini.jstk.carrental.exception.CustomerNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.sql.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,11 +21,26 @@ public class CustomerServiceTest {
     @Autowired
     CustomerService customerService;
 
+    @Autowired
+    TestTO testTO;
+
     @Test
-    public void shouldAddCustomers() {
+    public void shouldAddCustomer() {
         //given
-        CustomerTO customer = createFirtsCustomer();
-        CustomerTO customer2 = createSecondCustomer();
+        CustomerTO customer = testTO.createFirstCustomer();
+
+        //when
+        CustomerTO savedCustomer = customerService.addCustomer(customer);
+
+        //then
+        assertThat(savedCustomer.getId()).isNotNull();
+    }
+
+    @Test
+    public void shouldFindCustomerById() {
+        //given
+        CustomerTO customer = testTO.createFirstCustomer();
+        CustomerTO customer2 = testTO.createSecondCustomer();
 
         CustomerTO savedCustomer = customerService.addCustomer(customer);
         CustomerTO savedCustomer2 = customerService.addCustomer(customer2);
@@ -39,11 +53,21 @@ public class CustomerServiceTest {
         assertThat(savedCustomer2.getId()).isNotNull();
     }
 
+    @Test(expected = CustomerNotFoundException.class)
+    public void shouldThrowCustomerNotFoundException() {
+        //given
+        CustomerTO customer = testTO.createFirstCustomer();
+        customerService.addCustomer(customer);
+
+        //when
+        customerService.findCustomerById(4L);
+    }
+
     @Test
     public void shouldFindAllCustomers() {
         //given
-        CustomerTO customer = createFirtsCustomer();
-        CustomerTO customer2 = createSecondCustomer();
+        CustomerTO customer = testTO.createFirstCustomer();
+        CustomerTO customer2 = testTO.createSecondCustomer();
 
         customerService.addCustomer(customer);
         customerService.addCustomer(customer2);
@@ -55,35 +79,4 @@ public class CustomerServiceTest {
         assertThat(customersList.size()).isEqualTo(2);
     }
 
-    private CustomerTO createFirtsCustomer() {
-        return CustomerTO.builder()
-                .name("Adam")
-                .surname("Kowalski")
-                .eMail("ad@gmail.com")
-                .mobilePhone(600253400)
-                .creditCard("4684732941845524")
-                .drivingLicense("120/155/17")
-                .dateOfBirth(Date.valueOf("1980-11-23"))
-                .address(Address.builder()
-                        .street("Jackowskiego 30")
-                        .postalCode("60-450")
-                        .city("Poznan").build())
-                .build();
-    }
-
-    private CustomerTO createSecondCustomer() {
-        return CustomerTO.builder()
-                .name("Paulina")
-                .surname("Tracz")
-                .eMail("paula@gmail.com")
-                .mobilePhone(608253400)
-                .creditCard("7084732941845524")
-                .drivingLicense("300/155/17")
-                .dateOfBirth(Date.valueOf("1982-12-10"))
-                .address(Address.builder()
-                        .street("Polna 20")
-                        .postalCode("60-700")
-                        .city("Poznan").build())
-                .build();
-    }
 }

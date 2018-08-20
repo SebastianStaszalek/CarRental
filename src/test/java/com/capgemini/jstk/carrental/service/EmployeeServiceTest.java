@@ -5,6 +5,7 @@ import com.capgemini.jstk.carrental.dto.CarTO;
 import com.capgemini.jstk.carrental.dto.EmployeePositionTO;
 import com.capgemini.jstk.carrental.dto.EmployeeTO;
 import com.capgemini.jstk.carrental.dto.LocationTO;
+import com.capgemini.jstk.carrental.exception.EmployeeNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,15 +34,55 @@ public class EmployeeServiceTest {
     @Autowired
     CarService carService;
 
+    @Autowired
+    TestTO testTO;
+
+    @Test
+    public void shouldAddEmployee() {
+        //given
+        EmployeeTO employee = testTO.createFirstEmployee();
+
+        //when
+        EmployeeTO savedEmployee = employeeService.addEmployee(employee);
+
+        //then
+        assertThat(savedEmployee.getId()).isNotNull();
+    }
+
+    @Test
+    public void shouldFindEmployeeById() {
+        //given
+        EmployeeTO employee = testTO.createFirstEmployee();
+
+        EmployeeTO savedEmployee = employeeService.addEmployee(employee);
+
+        //when
+        EmployeeTO employeeToCheck = employeeService.findEmployeeById(savedEmployee.getId());
+
+        //then
+        assertThat(employee.getSurname()).isEqualTo(employeeToCheck.getSurname());
+        assertThat(employee.getEmployeePosition()).isEqualTo(employee.getEmployeePosition());
+    }
+
+    @Test(expected = EmployeeNotFoundException.class)
+    public void shouldThrowEmployeeNotFoundException() {
+        //given
+        EmployeeTO employee = testTO.createFirstEmployee();
+        employeeService.addEmployee(employee);
+
+        //when
+        employeeService.findEmployeeById(2L);
+    }
+
     @Test
     public void shouldFindAllEmployeesByLocation() {
         //given
-        EmployeePositionTO position = createFirstPosition();
-        EmployeeTO employee1 = createFirstEmployee();
-        EmployeeTO employee2 = createSecondEmployee();
-        EmployeeTO employee3 = createThirdEmployee();
+        EmployeePositionTO position = testTO.createFirstPosition();
+        EmployeeTO employee1 = testTO.createFirstEmployee();
+        EmployeeTO employee2 = testTO.createSecondEmployee();
+        EmployeeTO employee3 = testTO.createThirdEmployee();
 
-        LocationTO location = createFirstLocation();
+        LocationTO location = testTO.createFirstLocation();
 
         employeePositionService.addEmployeePosition(position);
         EmployeeTO savedEmployee1 = employeeService.addEmployee(employee1);
@@ -64,14 +105,14 @@ public class EmployeeServiceTest {
     @Test
     public void shouldFindAllEmployeesByCarUnderKeepAndLocation() {
         //given
-        EmployeePositionTO position = createFirstPosition();
-        EmployeeTO employee1 = createFirstEmployee();
-        EmployeeTO employee2 = createSecondEmployee();
-        EmployeeTO employee3 = createThirdEmployee();
+        EmployeePositionTO position = testTO.createFirstPosition();
+        EmployeeTO employee1 = testTO.createFirstEmployee();
+        EmployeeTO employee2 = testTO.createSecondEmployee();
+        EmployeeTO employee3 = testTO.createThirdEmployee();
 
-        LocationTO location = createFirstLocation();
+        LocationTO location = testTO.createFirstLocation();
 
-        CarTO car = createFirstCar();
+        CarTO car = testTO.createFirstCar();
 
         employeePositionService.addEmployeePosition(position);
         EmployeeTO savedEmployee1 = employeeService.addEmployee(employee1);
@@ -104,12 +145,12 @@ public class EmployeeServiceTest {
 
     @Test
     public void shouldFindEmployeesByPosition() {
-        EmployeePositionTO position1 = createFirstPosition();
-        EmployeePositionTO position2 = createSecondPosition();
+        EmployeePositionTO position1 = testTO.createFirstPosition();
+        EmployeePositionTO position2 = testTO.createSecondPosition();
 
-        EmployeeTO employee1 = createFirstEmployee();
-        EmployeeTO employee2 = createSecondEmployee();
-        EmployeeTO employee3 = createThirdEmployee();
+        EmployeeTO employee1 = testTO.createFirstEmployee();
+        EmployeeTO employee2 = testTO.createSecondEmployee();
+        EmployeeTO employee3 = testTO.createThirdEmployee();
 
         EmployeePositionTO savedPosition = employeePositionService.addEmployeePosition(position1);
         employeePositionService.addEmployeePosition(position2);
@@ -125,68 +166,4 @@ public class EmployeeServiceTest {
         assertThat(employeesList.size()).isEqualTo(2);
     }
 
-    private EmployeePositionTO createFirstPosition() {
-        return EmployeePositionTO.builder()
-                .name("Sprzedawca")
-                .build();
-    }
-
-    private EmployeePositionTO createSecondPosition() {
-        return EmployeePositionTO.builder()
-                .name("Kierownik")
-                .build();
-    }
-
-    private EmployeeTO createFirstEmployee() {
-        return EmployeeTO.builder()
-                .name("Tomasz")
-                .surname("Kot")
-                .employeePosition(EmployeePositionTO.builder()
-                        .id(1L)
-                        .name("Sprzedawca").build())
-                .build();
-    }
-
-    private EmployeeTO createSecondEmployee() {
-        return EmployeeTO.builder()
-                .name("Lukasz")
-                .surname("Majek")
-                .employeePosition(EmployeePositionTO.builder()
-                        .id(1L)
-                        .name("Sprzedawca").build())
-                .build();
-    }
-
-    private EmployeeTO createThirdEmployee() {
-        return EmployeeTO.builder()
-                .name("Maja")
-                .surname("Heller")
-                .employeePosition(EmployeePositionTO.builder()
-                        .id(2L)
-                        .name("Sprzedawca").build())
-                .build();
-    }
-
-    private LocationTO createFirstLocation() {
-        return LocationTO.builder()
-                .phoneNumber(604567900)
-                .address(Address.builder()
-                        .city("Warszawa")
-                        .street("Aleje 17")
-                        .postalCode("02-300").build())
-                .build();
-    }
-
-    private CarTO createFirstCar() {
-        return CarTO.builder()
-                .brand("Toyota")
-                .model("Yarris")
-                .carType("mini")
-                .productionYear(2017)
-                .color("white")
-                .engineCapacity(1400)
-                .power(90)
-                .mileage(200)
-                .build();
-    }
 }

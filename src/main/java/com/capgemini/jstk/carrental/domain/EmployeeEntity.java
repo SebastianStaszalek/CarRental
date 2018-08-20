@@ -57,10 +57,5 @@ public class EmployeeEntity extends Auditable <String> implements Serializable {
         cars.add(carEntity);
     }
 
-    public void removeCar(CarEntity car) {
-        cars.remove(car);
-    }
-
-
 
    }

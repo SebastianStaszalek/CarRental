@@ -31,15 +31,5 @@ public class EmployeePositionEntity extends Auditable<String> implements Seriali
     @OneToMany(mappedBy = "position")
     Set<EmployeeEntity> employees;
 
-    public void addEmployee(EmployeeEntity employee) {
-        employee.setPosition(this);
-        employees.add(employee);
-    }
-
-    public void deleteEmployee(EmployeeEntity employee) {
-        employee.getPosition().
-        employees.remove(employee);
-    }
-
 
 }

@@ -4,6 +4,7 @@ import com.capgemini.jstk.carrental.domain.Address;
 import com.capgemini.jstk.carrental.dto.EmployeePositionTO;
 import com.capgemini.jstk.carrental.dto.EmployeeTO;
 import com.capgemini.jstk.carrental.dto.LocationTO;
+import com.capgemini.jstk.carrental.exception.LocationNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,11 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-//@SpringBootTest(properties = "spring.profiles.active=mysql")
+/**
+ * @SpringBootTest(properties = "spring.profiles.active=mysql")
+ * configuration for running tests on mysql db
+ */
+//
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(properties = "spring.profiles.active=hsql")
@@ -31,10 +36,26 @@ public class LocationServiceTest {
     @Autowired
     EmployeePositionService employeePositionService;
 
+    @Autowired
+    TestTO testTO;
+
+    @Test
+    public void shouldAddLocation() {
+        //given
+        LocationTO location = testTO.createFirstLocation();
+
+        //when
+        LocationTO savedLocation = locationService.addLocation(location);
+
+        //then
+        assertThat(savedLocation.getId()).isNotNull();
+        assertThat(location.getPhoneNumber()).isEqualTo(savedLocation.getPhoneNumber());
+    }
+
     @Test
     public void shouldFindLocationById() {
         //given
-        LocationTO location = createFirstLocation();
+        LocationTO location = testTO.createFirstLocation();
 
         LocationTO savedLocation = locationService.addLocation(location);
 
@@ -47,12 +68,39 @@ public class LocationServiceTest {
         assertThat(locationToCheck.getAddress().getCity()).isEqualTo("Poznan");
     }
 
+    @Test(expected = LocationNotFoundException.class)
+    public void shouldThrowLocationNotFoundException() {
+        //given
+        LocationTO location = testTO.createFirstLocation();
+
+        locationService.addLocation(location);
+
+        //when
+       locationService.findLocationById(3L);
+    }
+
+    @Test
+    public void shouldGetAllLocations() {
+        //given
+        LocationTO location1 = testTO.createFirstLocation();
+        LocationTO location2 = testTO.createSecondLocation();
+
+        locationService.addLocation(location1);
+        locationService.addLocation(location2);
+
+        //when
+        List<LocationTO> locationsList = locationService.getAllLocations();
+
+        assertThat(locationsList).isNotEmpty();
+        assertThat(locationsList.size()).isEqualTo(2);
+    }
+
     @Test
     public void shouldDeleteLocation() {
         //given
-        LocationTO location1 = createFirstLocation();
-        LocationTO location2 = createSecondLocation();
-        LocationTO location3 = createThirdLocation();
+        LocationTO location1 = testTO.createFirstLocation();
+        LocationTO location2 = testTO.createSecondLocation();
+        LocationTO location3 = testTO.createThirdLocation();
 
         LocationTO locationToCheck = locationService.addLocation(location1);
         locationService.addLocation(location2);
@@ -63,15 +111,14 @@ public class LocationServiceTest {
         List<LocationTO> locationsList = locationService.getAllLocations();
 
         //then
-        assertThat(locationService.findLocationById(locationToCheck.getId())).isNull();
         assertThat(locationsList.size()).isEqualTo(2);
     }
 
     @Test
     public void shouldUpdateLocation() {
         //given
-        LocationTO location1 = createFirstLocation();
-        LocationTO location2 = createSecondLocation();
+        LocationTO location1 = testTO.createFirstLocation();
+        LocationTO location2 = testTO.createSecondLocation();
 
         locationService.addLocation(location1);
         LocationTO savedLocation = locationService.addLocation(location2);
@@ -98,12 +145,12 @@ public class LocationServiceTest {
     @Test
     public void shouldRemoveEmployeeFromLocation() {
         //given
-        EmployeePositionTO position = createFirstPosition();
-        EmployeeTO employee1 = createFirstEmployee();
-        EmployeeTO employee2 = createSecondEmployee();
-        EmployeeTO employee3 = createThirdEmployee();
+        EmployeePositionTO position = testTO.createFirstPosition();
+        EmployeeTO employee1 = testTO.createFirstEmployee();
+        EmployeeTO employee2 = testTO.createSecondEmployee();
+        EmployeeTO employee3 = testTO.createSecondEmployee();
 
-        LocationTO location = createFirstLocation();
+        LocationTO location = testTO.createFirstLocation();
 
         employeePositionService.addEmployeePosition(position);
         EmployeeTO savedEmployee1 = employeeService.addEmployee(employee1);
@@ -130,71 +177,4 @@ public class LocationServiceTest {
         assertThat(EmpFromLocation.getSurname()).isEqualTo("Majek");
     }
 
-
-
-    private LocationTO createFirstLocation() {
-        return LocationTO.builder()
-                .phoneNumber(604567880)
-                .address(Address.builder()
-                        .city("Poznan")
-                        .street("Wronska 17")
-                        .postalCode("60-754").build())
-                .build();
-    }
-
-    private LocationTO createSecondLocation() {
-        return LocationTO.builder()
-                .phoneNumber(700567880)
-                .address(Address.builder()
-                        .city("Gdansk")
-                        .street("Rzemieslnicza 5")
-                        .postalCode("46-200").build())
-                .build();
-    }
-
-    private LocationTO createThirdLocation() {
-        return LocationTO.builder()
-                .phoneNumber(600200100)
-                .address(Address.builder()
-                        .city("Wroclaw")
-                        .street("Polna 10")
-                        .postalCode("64-120").build())
-                .build();
-    }
-
-    private EmployeePositionTO createFirstPosition() {
-        return EmployeePositionTO.builder()
-                .name("Sprzedawca")
-                .build();
-    }
-
-    private EmployeeTO createFirstEmployee() {
-        return EmployeeTO.builder()
-                .name("Tomasz")
-                .surname("Kot")
-                .employeePosition(EmployeePositionTO.builder()
-                        .id(1L)
-                        .name("Sprzedawca").build())
-                .build();
-    }
-
-    private EmployeeTO createSecondEmployee() {
-        return EmployeeTO.builder()
-                .name("Lukasz")
-                .surname("Majek")
-                .employeePosition(EmployeePositionTO.builder()
-                        .id(1L)
-                        .name("Sprzedawca").build())
-                .build();
-    }
-
-    private EmployeeTO createThirdEmployee() {
-        return EmployeeTO.builder()
-                .name("Maja")
-                .surname("Heller")
-                .employeePosition(EmployeePositionTO.builder()
-                        .id(1L)
-                        .name("Sprzedawca").build())
-                .build();
-    }
 }

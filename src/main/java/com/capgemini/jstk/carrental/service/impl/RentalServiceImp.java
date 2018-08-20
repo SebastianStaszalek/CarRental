@@ -9,8 +9,10 @@ import com.capgemini.jstk.carrental.domain.CustomerEntity;
 import com.capgemini.jstk.carrental.domain.LocationEntity;
 import com.capgemini.jstk.carrental.domain.RentalEntity;
 import com.capgemini.jstk.carrental.dto.RentalTO;
+import com.capgemini.jstk.carrental.exception.message.Message;
 import com.capgemini.jstk.carrental.mapper.RentalMapper;
 import com.capgemini.jstk.carrental.service.RentalService;
+import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +40,8 @@ public class RentalServiceImp implements RentalService {
 
     @Override
     public RentalTO findRentalById(Long id) {
+        Preconditions.checkNotNull(id, Message.EMPTY_ID);
+
         return rentalMapper.map(rentalDao.findOne(id));
     }
 
@@ -48,6 +52,8 @@ public class RentalServiceImp implements RentalService {
 
     @Override
     public RentalTO addRental(RentalTO rentalTO) {
+        Preconditions.checkNotNull(rentalTO, Message.EMPTY_OBJECT);
+
         CustomerEntity customerEntity = customerDao.findOne(rentalTO.getCustomerId());
         CarEntity carEntity = carDao.findOne(rentalTO.getCarId());
         LocationEntity startLocation = locationDao.findOne(rentalTO.getStartLocationId());

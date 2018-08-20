@@ -24,7 +24,7 @@ public interface CarService {
 
     List<CarTO> findCarByCarer(EmployeeTO employee);
 
-    List<CarTO> findCarsRentedByDifferentCustomers();
+    List<CarTO> findCarsRentedByDifferentCustomers(Long customersNum);
 
     List<CarTO> findCarsRentedInGivenPeriodOfTime(Date from, Date to);
 }

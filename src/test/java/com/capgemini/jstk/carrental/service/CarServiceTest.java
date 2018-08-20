@@ -1,6 +1,5 @@
 package com.capgemini.jstk.carrental.service;
 
-import com.capgemini.jstk.carrental.domain.Address;
 import com.capgemini.jstk.carrental.dto.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,11 +36,25 @@ public class CarServiceTest {
     @Autowired
     CustomerService customerService;
 
+    @Autowired
+    TestTO testTO;
+
+    @Test
+    public void shouldAddCar() {
+        //given
+        CarTO car = testTO.createFirstCar();
+
+        //when
+        CarTO savedCar = carService.addCar(car);
+
+        //then
+        assertThat(savedCar.getId()).isNotNull();
+    }
 
     @Test
     public void shouldFindCarById() {
         //given
-        CarTO car = createFirstCar();
+        CarTO car = testTO.createFirstCar();
 
         CarTO savedCar = carService.addCar(car);
         //when
@@ -53,11 +66,30 @@ public class CarServiceTest {
     }
 
     @Test
+    public void shouldGetListOfAllCars() {
+        //given
+        CarTO car1 = testTO.createFirstCar();
+        CarTO car2 = testTO.createSecondCar();
+        CarTO car3 = testTO.createThirdCar();
+
+        carService.addCar(car1);
+        carService.addCar(car2);
+        carService.addCar(car3);
+
+        //when
+        List<CarTO> carsList = carService.getAllCars();
+
+        //then
+        assertThat(carsList).isNotEmpty();
+        assertThat(carsList.size()).isEqualTo(3);
+    }
+
+    @Test
     public void shouldDeleteCar() {
         //given
-        CarTO car1 = createFirstCar();
-        CarTO car2 = createSecondCar();
-        CarTO car3 = createThirdCar();
+        CarTO car1 = testTO.createFirstCar();
+        CarTO car2 = testTO.createSecondCar();
+        CarTO car3 = testTO.createThirdCar();
 
         carService.addCar(car1);
         CarTO carToCheck = carService.addCar(car2);
@@ -75,10 +107,10 @@ public class CarServiceTest {
     @Test
     public void shouldFindCarByTypeAndBrand() {
         //given
-        CarTO car1 = createFirstCar();
-        CarTO car2 = createSecondCar();
-        CarTO car3 = createThirdCar();
-        CarTO car4 = createFourthCar();
+        CarTO car1 = testTO.createFirstCar();
+        CarTO car2 = testTO.createSecondCar();
+        CarTO car3 = testTO.createThirdCar();
+        CarTO car4 = testTO.createFourthCar();
 
         carService.addCar(car1);
         carService.addCar(car2);
@@ -99,7 +131,7 @@ public class CarServiceTest {
     @Test
     public void shouldUpdateCar() {
         //given
-        CarTO car1= createFirstCar();
+        CarTO car1= testTO.createFirstCar();
 
         CarTO savedCar = carService.addCar(car1);
 
@@ -128,12 +160,12 @@ public class CarServiceTest {
     @Test
     public void shouldFindCarByCarer() {
         //given
-        EmployeePositionTO position = createFirstPosition();
-        CarTO car1 = createFirstCar();
-        CarTO car2 = createSecondCar();
-        CarTO car3 = createThirdCar();
+        EmployeePositionTO position = testTO.createFirstPosition();
+        CarTO car1 = testTO.createFirstCar();
+        CarTO car2 = testTO.createSecondCar();
+        CarTO car3 = testTO.createThirdCar();
 
-        EmployeeTO employee = createFirstEmployee();
+        EmployeeTO employee = testTO.createFirstEmployee();
 
         CarTO savedCar = carService.addCar(car1);
         carService.addCar(car2);
@@ -157,154 +189,163 @@ public class CarServiceTest {
     }
 
     @Test
-    public void shouldFindCarsRentedByMoreThenTenDifferentCustomers() {
+    public void shouldFindCarsRentedByMoreThanTenDifferentCustomers() {
         //given
-        CarTO car1 = carService.addCar(createFirstCar());
-        CarTO car2 = carService.addCar(createSecondCar());
+        CarTO car1 = testTO.createFirstCar();
+        CarTO car2 = testTO.createSecondCar();
 
-        LocationTO location1 = locationService.addLocation(createFirstLocation());
-        LocationTO location2 = locationService.addLocation(createSecondLocation());
+        LocationTO location1 = testTO.createFirstLocation();
+        LocationTO location2 = testTO.createSecondLocation();
 
-        CustomerTO customer1 = customerService.addCustomer(createFirstCustomer());
-        CustomerTO customer2 = customerService.addCustomer(createFirstCustomer());
-        CustomerTO customer3 = customerService.addCustomer(createFirstCustomer());
-        CustomerTO customer4 = customerService.addCustomer(createFirstCustomer());
-        CustomerTO customer5 = customerService.addCustomer(createFirstCustomer());
-        CustomerTO customer6 = customerService.addCustomer(createFirstCustomer());
-        CustomerTO customer7 = customerService.addCustomer(createFirstCustomer());
-        CustomerTO customer8 = customerService.addCustomer(createFirstCustomer());
-        CustomerTO customer9 = customerService.addCustomer(createFirstCustomer());
-        CustomerTO customer10 = customerService.addCustomer(createFirstCustomer());
-        CustomerTO customer11 = customerService.addCustomer(createFirstCustomer());
+        CustomerTO customer = testTO.createFirstCustomer();
+
+
+        CarTO savedCar1 = carService.addCar(car1);
+        CarTO savedCar2 = carService.addCar(car2);
+
+        LocationTO savedLocation1 = locationService.addLocation(location1);
+        LocationTO savedLocation2 = locationService.addLocation(location2);
+
+        CustomerTO savedCustomer1 = customerService.addCustomer(customer);
+        CustomerTO savedCustomer2 = customerService.addCustomer(customer);
+        CustomerTO savedCustomer3 = customerService.addCustomer(customer);
+        CustomerTO savedCustomer4 = customerService.addCustomer(customer);
+        CustomerTO savedCustomer5 = customerService.addCustomer(customer);
+        CustomerTO savedCustomer6 = customerService.addCustomer(customer);
+        CustomerTO savedCustomer7 = customerService.addCustomer(customer);
+        CustomerTO savedCustomer8 = customerService.addCustomer(customer);
+        CustomerTO savedCustomer9 = customerService.addCustomer(customer);
+        CustomerTO savedCustomer10 = customerService.addCustomer(customer);
+        CustomerTO savedCustomer11 = customerService.addCustomer(customer);
 
         RentalTO newRent1 = RentalTO.builder()
                 .startDate(Date.valueOf("2018-01-10"))
                 .endDate(Date.valueOf("2018-01-15"))
                 .totalCost(700)
-                .customerId(customer1.getId())
-                .carId(car1.getId())
-                .startLocationId(location1.getId())
-                .endLocationId(location2.getId())
+                .customerId(savedCustomer1.getId())
+                .carId(savedCar1.getId())
+                .startLocationId(savedLocation1.getId())
+                .endLocationId(savedLocation2.getId())
                 .build();
 
         RentalTO newRent2 = RentalTO.builder()
                 .startDate(Date.valueOf("2018-01-15"))
                 .endDate(Date.valueOf("2018-01-20"))
                 .totalCost(700)
-                .customerId(customer2.getId())
-                .carId(car1.getId())
-                .startLocationId(location1.getId())
-                .endLocationId(location2.getId())
+                .customerId(savedCustomer2.getId())
+                .carId(savedCar1.getId())
+                .startLocationId(savedLocation1.getId())
+                .endLocationId(savedLocation2.getId())
                 .build();
 
         RentalTO newRent3 = RentalTO.builder()
                 .startDate(Date.valueOf("2018-01-20"))
                 .endDate(Date.valueOf("2018-01-25"))
                 .totalCost(700)
-                .customerId(customer3.getId())
-                .carId(car1.getId())
-                .startLocationId(location1.getId())
-                .endLocationId(location2.getId())
+                .customerId(savedCustomer3.getId())
+                .carId(savedCar1.getId())
+                .startLocationId(savedLocation1.getId())
+                .endLocationId(savedLocation2.getId())
                 .build();
 
         RentalTO newRent4 = RentalTO.builder()
                 .startDate(Date.valueOf("2018-01-25"))
                 .endDate(Date.valueOf("2018-01-30"))
                 .totalCost(700)
-                .customerId(customer4.getId())
-                .carId(car1.getId())
-                .startLocationId(location1.getId())
-                .endLocationId(location2.getId())
+                .customerId(savedCustomer4.getId())
+                .carId(savedCar1.getId())
+                .startLocationId(savedLocation1.getId())
+                .endLocationId(savedLocation2.getId())
                 .build();
 
         RentalTO newRent5 = RentalTO.builder()
                 .startDate(Date.valueOf("2018-02-01"))
                 .endDate(Date.valueOf("2018-02-05"))
                 .totalCost(700)
-                .customerId(customer5.getId())
-                .carId(car1.getId())
-                .startLocationId(location1.getId())
-                .endLocationId(location2.getId())
+                .customerId(savedCustomer5.getId())
+                .carId(savedCar1.getId())
+                .startLocationId(savedLocation1.getId())
+                .endLocationId(savedLocation2.getId())
                 .build();
 
         RentalTO newRent6 = RentalTO.builder()
                 .startDate(Date.valueOf("2018-02-05"))
                 .endDate(Date.valueOf("2018-02-10"))
                 .totalCost(700)
-                .customerId(customer6.getId())
-                .carId(car1.getId())
-                .startLocationId(location1.getId())
-                .endLocationId(location1.getId())
+                .customerId(savedCustomer6.getId())
+                .carId(savedCar1.getId())
+                .startLocationId(savedLocation1.getId())
+                .endLocationId(savedLocation1.getId())
                 .build();
 
         RentalTO newRent7 = RentalTO.builder()
                 .startDate(Date.valueOf("2018-02-10"))
                 .endDate(Date.valueOf("2018-02-15"))
                 .totalCost(700)
-                .customerId(customer7.getId())
-                .carId(car1.getId())
-                .startLocationId(location1.getId())
-                .endLocationId(location1.getId())
+                .customerId(savedCustomer7.getId())
+                .carId(savedCar1.getId())
+                .startLocationId(savedLocation1.getId())
+                .endLocationId(savedLocation1.getId())
                 .build();
 
         RentalTO newRent8 = RentalTO.builder()
                 .startDate(Date.valueOf("2018-02-15"))
                 .endDate(Date.valueOf("2018-02-20"))
                 .totalCost(700)
-                .customerId(customer8.getId())
-                .carId(car1.getId())
-                .startLocationId(location2.getId())
-                .endLocationId(location2.getId())
+                .customerId(savedCustomer8.getId())
+                .carId(savedCar1.getId())
+                .startLocationId(savedLocation2.getId())
+                .endLocationId(savedLocation2.getId())
                 .build();
 
         RentalTO newRent9 = RentalTO.builder()
                 .startDate(Date.valueOf("2018-02-20"))
                 .endDate(Date.valueOf("2018-02-25"))
                 .totalCost(700)
-                .customerId(customer9.getId())
-                .carId(car1.getId())
-                .startLocationId(location2.getId())
-                .endLocationId(location1.getId())
+                .customerId(savedCustomer9.getId())
+                .carId(savedCar1.getId())
+                .startLocationId(savedLocation2.getId())
+                .endLocationId(savedLocation1.getId())
                 .build();
 
         RentalTO newRent10 = RentalTO.builder()
                 .startDate(Date.valueOf("2018-02-25"))
                 .endDate(Date.valueOf("2018-02-30"))
                 .totalCost(700)
-                .customerId(customer10.getId())
-                .carId(car1.getId())
-                .startLocationId(location2.getId())
-                .endLocationId(location1.getId())
+                .customerId(savedCustomer10.getId())
+                .carId(savedCar1.getId())
+                .startLocationId(savedLocation2.getId())
+                .endLocationId(savedLocation1.getId())
                 .build();
 
         RentalTO newRent11 = RentalTO.builder()
                 .startDate(Date.valueOf("2018-03-01"))
                 .endDate(Date.valueOf("2018-03-15"))
                 .totalCost(1200)
-                .customerId(customer11.getId())
-                .carId(car1.getId())
-                .startLocationId(location1.getId())
-                .endLocationId(location2.getId())
+                .customerId(savedCustomer11.getId())
+                .carId(savedCar1.getId())
+                .startLocationId(savedLocation1.getId())
+                .endLocationId(savedLocation2.getId())
                 .build();
 
         RentalTO secondCarRent1 = RentalTO.builder()
                 .startDate(Date.valueOf("2018-01-10"))
                 .endDate(Date.valueOf("2018-01-15"))
                 .totalCost(700)
-                .customerId(customer1.getId())
-                .carId(car2.getId())
-                .startLocationId(location1.getId())
-                .endLocationId(location2.getId())
+                .customerId(savedCustomer1.getId())
+                .carId(savedCar2.getId())
+                .startLocationId(savedLocation1.getId())
+                .endLocationId(savedLocation2.getId())
                 .build();
 
         RentalTO secondCarRent2 = RentalTO.builder()
                 .startDate(Date.valueOf("2018-04-10"))
                 .endDate(Date.valueOf("2018-04-15"))
                 .totalCost(600)
-                .customerId(customer6.getId())
-                .carId(car2.getId())
-                .startLocationId(location1.getId())
-                .endLocationId(location2.getId())
+                .customerId(savedCustomer6.getId())
+                .carId(savedCar2.getId())
+                .startLocationId(savedLocation1.getId())
+                .endLocationId(savedLocation2.getId())
                 .build();
 
         rentalService.addRental(newRent1);
@@ -322,7 +363,7 @@ public class CarServiceTest {
         rentalService.addRental(secondCarRent2);
 
         //when
-        List<CarTO> carsList = carService.findCarsRentedByDifferentCustomers();
+        List<CarTO> carsList = carService.findCarsRentedByDifferentCustomers(10L);
         CarTO carToCheck = carsList.get(0);
         //then
         assertThat(carsList.size()).isEqualTo(1);
@@ -333,55 +374,67 @@ public class CarServiceTest {
     @Test
     public void shouldFindCarsRentedInGivenPeriodOfTime() {
         //given
-        CarTO car1 = carService.addCar(createFirstCar());
-        CarTO car2 = carService.addCar(createSecondCar());
-        CarTO car3 = carService.addCar(createThirdCar());
-        CarTO car4 = carService.addCar(createFourthCar());
+        CarTO car1 = testTO.createFirstCar();
+        CarTO car2 = testTO.createSecondCar();
+        CarTO car3 = testTO.createThirdCar();
+        CarTO car4 = testTO.createFourthCar();
 
-        LocationTO location = locationService.addLocation(createFirstLocation());
+        LocationTO location = testTO.createFirstLocation();
 
-        CustomerTO customer1 = customerService.addCustomer(createFirstCustomer());
-        CustomerTO customer2 = customerService.addCustomer(createSecondCustomer());
-        CustomerTO customer3 = customerService.addCustomer(createSecondCustomer());
+        CustomerTO customer1 = testTO.createFirstCustomer();
+        CustomerTO customer2 = testTO.createSecondCustomer();
+        CustomerTO customer3 = testTO.createSecondCustomer();
+
+        CarTO savedCar1 = carService.addCar(car1);
+        CarTO savedCar2 = carService.addCar(car2);
+        CarTO savedCar3 = carService.addCar(car3);
+        CarTO savedCar4 = carService.addCar(car4);
+
+        LocationTO savedLocation = locationService.addLocation(location);
+
+        CustomerTO savedCustomer1 = customerService.addCustomer(customer1);
+        CustomerTO savedCustomer2 = customerService.addCustomer(customer2);
+        CustomerTO savedCustomer3 = customerService.addCustomer(customer3);
+
 
         RentalTO newRent1 = RentalTO.builder()
                 .startDate(Date.valueOf("2018-01-14"))
                 .endDate(Date.valueOf("2018-01-24"))
                 .totalCost(700)
-                .customerId(customer1.getId())
-                .carId(car1.getId())
-                .startLocationId(location.getId())
-                .endLocationId(location.getId())
+                .customerId(savedCustomer1.getId())
+                .carId(savedCar1.getId())
+                .startLocationId(savedLocation.getId())
+                .endLocationId(savedLocation.getId())
                 .build();
 
         RentalTO newRent2 = RentalTO.builder()
                 .startDate(Date.valueOf("2018-01-15"))
                 .endDate(Date.valueOf("2018-01-20"))
                 .totalCost(700)
-                .customerId(customer2.getId())
-                .carId(car2.getId())
-                .startLocationId(location.getId())
-                .endLocationId(location.getId())
+                .customerId(savedCustomer2.getId())
+                .carId(savedCar2.getId())
+                .startLocationId(savedLocation.getId())
+                .endLocationId(savedLocation.getId())
                 .build();
 
         RentalTO newRent3 = RentalTO.builder()
                 .startDate(Date.valueOf("2018-01-16"))
                 .endDate(Date.valueOf("2018-01-26"))
                 .totalCost(700)
-                .customerId(customer3.getId())
-                .carId(car3.getId())
-                .startLocationId(location.getId())
-                .endLocationId(location.getId())
+                .customerId(savedCustomer3.getId())
+                .carId(savedCar3.getId())
+                .startLocationId(savedLocation.getId())
+                .endLocationId(savedLocation.getId())
                 .build();
 
         RentalTO newRent4 = RentalTO.builder()
                 .startDate(Date.valueOf("2018-01-20"))
                 .endDate(Date.valueOf("2018-01-23"))
                 .totalCost(700)
-                .customerId(customer2.getId())
-                .carId(car4.getId())
-                .startLocationId(location.getId())
-                .endLocationId(location.getId())
+                .customerId(savedCustomer2.getId())
+                .carId(savedCar4.getId())
+                .startLocationId(savedLocation.getId())
+                .endLocationId(savedLocation.getId())
                 .build();
 
         rentalService.addRental(newRent1);
@@ -398,127 +451,8 @@ public class CarServiceTest {
 
         //then
         assertThat(carsList.size()).isEqualTo(1);
-        assertThat(carTOCheck.getId()).isEqualTo(car3.getId());
+        assertThat(carTOCheck.getId()).isEqualTo(savedCar3.getId());
 
     }
 
-    private EmployeePositionTO createFirstPosition() {
-        return EmployeePositionTO.builder()
-                .name("Kierownik")
-                .build();
-    }
-
-    private EmployeeTO createFirstEmployee() {
-        return EmployeeTO.builder()
-                .name("Tomasz")
-                .surname("Kot")
-                .employeePosition(EmployeePositionTO.builder()
-                    .id(1L)
-                    .name("Kierownik").build())
-                .build();
-    }
-
-    private CarTO createFirstCar() {
-        return CarTO.builder()
-                .brand("Toyota")
-                .model("Yarris")
-                .carType("mini")
-                .productionYear(2017)
-                .color("white")
-                .engineCapacity(1400)
-                .power(90)
-                .mileage(200)
-                .build();
-    }
-
-    public CarTO createSecondCar() {
-        return CarTO.builder()
-                .brand("Toyota")
-                .model("Yarris")
-                .carType("mini")
-                .productionYear(2017)
-                .color("black")
-                .engineCapacity(1400)
-                .power(90)
-                .mileage(150)
-                .build();
-    }
-
-    private CarTO createThirdCar() {
-        return CarTO.builder()
-                .brand("BMW")
-                .model("X1")
-                .carType("suv")
-                .productionYear(2017)
-                .color("red")
-                .engineCapacity(2000)
-                .power(170)
-                .mileage(10000)
-                .build();
-    }
-
-    private CarTO createFourthCar() {
-        return CarTO.builder()
-                .brand("Toyota")
-                .model("Avensis")
-                .carType("sedan")
-                .productionYear(2017)
-                .color("blue")
-                .engineCapacity(1900)
-                .power(130)
-                .mileage(1000)
-                .build();
-    }
-
-    private LocationTO createFirstLocation() {
-        return LocationTO.builder()
-                .phoneNumber(604567880)
-                .address(Address.builder()
-                        .city("Poznan")
-                        .street("Wronska 17")
-                        .postalCode("60-754").build())
-                .build();
-    }
-
-    private LocationTO createSecondLocation() {
-        return LocationTO.builder()
-                .phoneNumber(700567880)
-                .address(Address.builder()
-                        .city("Gdansk")
-                        .street("Rzemieslnicza 5")
-                        .postalCode("46-200").build())
-                .build();
-    }
-
-    private CustomerTO createFirstCustomer() {
-        return CustomerTO.builder()
-                .name("Adam")
-                .surname("Kowalski")
-                .eMail("ad@gmail.com")
-                .mobilePhone(600253400)
-                .creditCard("4684732941845524")
-                .drivingLicense("120/155/17")
-                .dateOfBirth(Date.valueOf("1980-11-23"))
-                .address(Address.builder()
-                        .street("Jackowskiego 30")
-                        .postalCode("60-450")
-                        .city("Poznan").build())
-                .build();
-    }
-
-    private CustomerTO createSecondCustomer() {
-        return CustomerTO.builder()
-                .name("Robert")
-                .surname("Kolarczyk")
-                .eMail("robkol@gmail.com")
-                .mobilePhone(700253400)
-                .creditCard("2224732941845524")
-                .drivingLicense("030/155/20")
-                .dateOfBirth(Date.valueOf("1974-11-11"))
-                .address(Address.builder()
-                        .street("Jackowskiego 30")
-                        .postalCode("54-100")
-                        .city("Wroclaw").build())
-                .build();
-    }
 }

@@ -60,25 +60,9 @@ public class LocationEntity extends Auditable<String> implements Serializable {
         startRentals.add(rental);
     }
 
-    public void removeStartRental(RentalEntity rental) {
-        startRentals.remove(rental);
-    }
-
     public void addEndRental(RentalEntity rental) {
         rental.setEndLocation(this);
         endRentals.add(rental);
     }
 
-    public void removeEndRental(RentalEntity rental) {
-        endRentals.remove(rental);
-    }
-
-    public void addCar(CarEntity car) {
-        car.setCurrentLocation(this);
-        cars.add(car);
-    }
-
-    public void removeCar(CarEntity car) {
-        cars.remove(car);
-    }
 }

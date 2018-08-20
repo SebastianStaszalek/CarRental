@@ -12,7 +12,7 @@ public interface CarDao extends Dao<CarEntity, Long> {
 
     List<CarEntity> findCarByCarer(Long id);
 
-    List<CarEntity> findCarsRentedByDifferentCustomers();
+    List<CarEntity> findCarsRentedByDifferentCustomers(Long customersNum);
 
     List<CarEntity> findCarsRentedInGivenPeriodOfTime(Date from, Date to);
 

@@ -32,7 +32,6 @@ public class CarEntity extends Auditable<String> implements Serializable {
     @Column(nullable = false, length = 20)
     private String model;
 
-    //@ManyToOne
     @Column(name = "car_type", nullable = false, length = 20)
     private String carType;
 
@@ -77,10 +76,6 @@ public class CarEntity extends Auditable<String> implements Serializable {
     public void addRental(RentalEntity rental) {
         rental.setCar(this);
         rentals.add(rental);
-    }
-
-    public void removeRental(RentalEntity rental) {
-        rentals.remove(rental);
     }
 
 }

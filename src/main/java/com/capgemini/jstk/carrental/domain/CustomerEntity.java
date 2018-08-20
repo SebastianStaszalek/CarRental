@@ -59,9 +59,5 @@ public class CustomerEntity extends Auditable<String> implements Serializable {
         rentals.add(rental);
     }
 
-    public void removeStartRental(RentalEntity rental) {
-        rentals.remove(rental);
-    }
-
 }
 
