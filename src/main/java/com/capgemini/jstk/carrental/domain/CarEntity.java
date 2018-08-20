@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@EqualsAndHashCode(exclude = {"currentLocation", "rentals", "carers"})
+@EqualsAndHashCode(callSuper = true, exclude = {"currentLocation", "rentals", "carers"})
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

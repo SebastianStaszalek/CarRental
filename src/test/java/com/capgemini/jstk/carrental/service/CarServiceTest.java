@@ -371,6 +371,7 @@ public class CarServiceTest {
         //when
         List<CarTO> carsList = carService.findCarsRentedByDifferentCustomers(10L);
         CarTO carToCheck = carsList.get(0);
+
         //then
         assertThat(carsList.size()).isEqualTo(1);
         assertThat(carToCheck.getColor()).isEqualTo(car1.getColor());

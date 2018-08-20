@@ -48,7 +48,4 @@ public class CarMapper {
         return carEntities.stream().map(this::map).collect(Collectors.toList());
     }
 
-    public List<CarEntity> map2Entity(List<CarTO> carTOs) {
-        return carTOs.stream().map(this::map).collect(Collectors.toList());
-    }
 }

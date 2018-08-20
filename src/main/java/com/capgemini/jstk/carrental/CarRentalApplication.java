@@ -10,5 +10,6 @@ public class CarRentalApplication {
 		System.setProperty("spring.profiles.active", "mysql");
 
 		SpringApplication.run(CarRentalApplication.class, args);
+
 	}
 }

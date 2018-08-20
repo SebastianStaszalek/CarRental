@@ -22,12 +22,12 @@ import java.util.List;
 @Transactional
 public class RentalServiceImp implements RentalService {
 
-    RentalMapper rentalMapper;
-    RentalDao rentalDao;
+    private RentalMapper rentalMapper;
+    private RentalDao rentalDao;
 
-    CustomerDao customerDao;
-    CarDao carDao;
-    LocationDao locationDao;
+    private CustomerDao customerDao;
+    private CarDao carDao;
+    private LocationDao locationDao;
 
     public RentalServiceImp(RentalMapper rentalMapper, RentalDao rentalDao, CustomerDao customerDao,
                             CarDao carDao, LocationDao locationDao) {

@@ -36,7 +36,4 @@ public class LocationMapper {
         return locationEntities.stream().map(this::map).collect(Collectors.toList());
     }
 
-    public List<LocationEntity> map2Entity(List<LocationTO> locationTOs) {
-        return locationTOs.stream().map(this::map).collect(Collectors.toList());
-    }
 }

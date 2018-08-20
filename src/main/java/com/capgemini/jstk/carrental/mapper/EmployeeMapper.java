@@ -36,8 +36,5 @@ public class EmployeeMapper {
         return employeeEntities.stream().map(this::map).collect(Collectors.toList());
     }
 
-    public List<EmployeeEntity> map2Entity(List<EmployeeTO> employeeTOs) {
-        return employeeTOs.stream().map(this::map).collect(Collectors.toList());
-    }
 
 }

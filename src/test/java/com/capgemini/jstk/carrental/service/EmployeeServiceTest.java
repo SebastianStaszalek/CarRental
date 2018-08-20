@@ -96,6 +96,7 @@ public class EmployeeServiceTest {
         List<EmployeeTO> employeesList = employeeService.findAllEmployeesByLocation(savedLocation.getId());
 
         EmployeeTO firstEmpFromLocation = employeesList.get(0);
+
         //then
         assertThat(employeesList.size()).isEqualTo(2);
         assertThat(firstEmpFromLocation.getName()).isEqualTo("Tomasz");
@@ -136,6 +137,7 @@ public class EmployeeServiceTest {
 
         EmployeeTO firstCarCarer = employeesList.get(0);
         EmployeeTO secondCarCarer = employeesList.get(1);
+
         //then
         assertThat(employeesList.size()).isEqualTo(2);
         assertThat(firstCarCarer.getName()).isEqualTo("Tomasz");

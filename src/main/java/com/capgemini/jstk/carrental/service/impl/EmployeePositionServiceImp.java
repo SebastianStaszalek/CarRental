@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class EmployeePositionServiceImp implements EmployeePositionService {
 
-    EmployeePositionDao employeePositionDao;
-    EmployeePositionMapper employeePositionMapper;
+    private EmployeePositionDao employeePositionDao;
+    private EmployeePositionMapper employeePositionMapper;
 
     @Autowired
     public EmployeePositionServiceImp(EmployeePositionDao employeePositionDao, EmployeePositionMapper employeePositionMapper) {

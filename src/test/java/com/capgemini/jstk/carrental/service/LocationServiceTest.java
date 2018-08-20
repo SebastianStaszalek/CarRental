@@ -171,6 +171,7 @@ public class LocationServiceTest {
         EmployeeTO EmpFromLocation = employeesList.get(0);
 
         EmployeeTO removedEmployee = employeeService.findEmployeeById(savedEmployee1.getId());
+
         //then
         assertThat(employeesList.size()).isEqualTo(1);
         assertThat(removedEmployee.getId()).isNotNull();

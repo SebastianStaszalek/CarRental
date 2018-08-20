@@ -145,6 +145,7 @@ public class RentalServiceTest {
         CustomerTO customerToCheck = customerService.findCustomerById(savedCustomer.getId());
         LocationTO locationToCheck = locationService.findLocationById(savedStartLocation.getId());
         LocationTO locationToCheck2 = locationService.findLocationById(savedEndLocation.getId());
+
         //then
         assertThat(rentalsList).isEmpty();
         assertThat(rentalToCheck).isNull();
